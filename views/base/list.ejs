@@ -144,7 +144,7 @@
           console.log(response);
           $("#updateRecordModal").modal("show");
           $("#updateRecordForm input[name=name]").val(data.name);
-          $(".recordId").val(data.id);
+          $(".recordIdUpdate").text(data.id);
 
           $("#updateRecordForm").submit(function (event) {
             event.preventDefault();
