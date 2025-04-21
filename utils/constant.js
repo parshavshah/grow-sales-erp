@@ -1,4 +1,8 @@
-module.exports.roles = ["admin", "employee", "client"];
+module.exports.roles = {
+  admin: "admin",
+  employee: "employee",
+  client: "client",
+};
 
 module.exports.permissions = [
   {
@@ -14,3 +18,8 @@ module.exports.permissions = [
     actions: ["create", "read", "update", "delete"],
   },
 ];
+
+module.exports.status = {
+  active: "active",
+  inactive: "inactive",
+};
