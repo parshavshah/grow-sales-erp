@@ -1,0 +1,196 @@
+<div class="content-wrapper">
+  <%- include('../partials/page_title'); %> <%- include('./create'); %> <%-
+  include('./update'); %>
+  <section class="content">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title mt-1"><b><%= title %> List</b></h3>
+        <div class="card-tools pr-2">
+          <a
+            data-toggle="modal"
+            data-target="#createRecordModal"
+            href="#"
+            class="btn btn-primary btn-sm"
+          >
+            <i class="fas fa-plus"></i> Add New Role
+          </a>
+        </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table
+          id="recordList"
+          class="table table-bordered table-sm table-striped"
+        >
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% records.forEach(function(record) { %>
+            <tr>
+              <td><%= record.id %></td>
+              <td><%= record.name %></td>
+              <td>
+                <a href="#" class="btn btn-info btn-xs">
+                  <i class="fas fa-info-circle"></i> View
+                </a>
+                <a
+                  class="btn updateRecord btn-primary btn-xs"
+                  data-id="<%= record.id %>"
+                >
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+                <a
+                  href="#"
+                  data-id="<%= record.id %>"
+                  class="deleteRecord btn btn-danger btn-xs"
+                >
+                  <i class="fas fa-trash"></i> Delete
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Actions</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  $(function () {
+    // datatable code
+    $("#recordList")
+      .DataTable({
+        responsive: true,
+        lengthChange: false,
+        autoWidth: false,
+        order: false,
+        pageLength: 10,
+        lengthChange: true,
+      })
+      .buttons()
+      .container();
+
+    // Delete functionality with SweetAlert
+    $(".deleteRecord").click(function () {
+      const recordId = $(this).data("id");
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // AJAX request to delete permission
+          $.ajax({
+            url: "<%= baseUrl %>base/delete/" + recordId,
+            type: "DELETE",
+            success: function (response, textStatus, xhr) {
+              if (xhr.status == 200) {
+                Swal.fire({
+                  title: "Deleted!",
+                  text: "<%= singleTitle %> has been deleted successfully.",
+                  icon: "success",
+                  timer: 1500,
+                  showConfirmButton: false,
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  title: "Error!",
+                  text: response.message || "Failed to delete item.",
+                  icon: "error",
+                });
+              }
+            },
+            error: function (xhr) {
+              Swal.fire({
+                title: "Error!",
+                text:
+                  xhr.responseJSON?.message ||
+                  "An error occurred while deleting the item.",
+                icon: "error",
+              });
+            },
+          });
+        }
+      });
+    });
+
+    // Update functionality with SweetAlert
+    $(".updateRecord").click(function () {
+      const recordId = $(this).data("id");
+      $.ajax({
+        url: "<%= baseUrl %>base/read/" + recordId,
+        type: "GET",
+        success: function (response) {
+          const data = response.data;
+          console.log(response);
+          $("#updateRecordModal").modal("show");
+          $("#updateRecordForm input[name=name]").val(data.name);
+          $(".recordId").val(data.id);
+
+          $("#updateRecordForm").submit(function (event) {
+            event.preventDefault();
+
+            const formData = {
+              name: $("#updateRecordForm input[name=name]").val(),
+            };
+
+            $.ajax({
+              url: "<%= baseUrl %>base/update/" + recordId,
+              type: "PATCH",
+              data: JSON.stringify(formData),
+              contentType: "application/json",
+              success: function (response, textStatus, xhr) {
+                if (xhr.status == 200) {
+                  Swal.fire({
+                    title: "Success!",
+                    text: response.message,
+                    icon: "success",
+                    confirmButtonText: "OK",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      location.reload();
+                    }
+                  });
+                }
+              },
+              error: function (xhr) {
+                let errorMessage = "An error occurred while creating the role.";
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                  errorMessage = xhr.responseJSON.message;
+                }
+                Swal.fire({
+                  title: "Error!",
+                  text: errorMessage,
+                  icon: "error",
+                  confirmButtonText: "OK",
+                });
+              },
+            });
+          });
+        },
+        error: function (xhr) {
+          console.error(xhr);
+        },
+      });
+    });
+  });
+</script>
