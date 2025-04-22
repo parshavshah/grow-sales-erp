@@ -2,4 +2,40 @@
 - Add read in employee module
 - Employee email unique validation
 - Send email notification on employee create
-- 
+- create employee module
+- create client module
+- create admin module
+- create leads module
+- create notes module
+- create reminders module
+- create products module
+- create taxes module
+- create invoice module
+- create quotation module
+- create payment module
+- create expenses module
+- create projects module
+- create task module
+- create comments module
+- create timeEntry module
+- create todo module
+- create activityLog module
+- create systemSettings module
+- create notifications module
+
+- create model for following tables
+- reminders
+- products
+- taxes
+- invoices
+- invoice_products
+- quotations
+- quotation_production
+- payments
+- expenses
+- projects
+- comments
+- timeEntry
+- todo
+- systemSettings
+- notification
