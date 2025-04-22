@@ -8,7 +8,7 @@
         <div class="card-tools pr-2">
           <a
             data-toggle="modal"
-            data-target="#createRecordModal"
+            data-target="#createEmployeeModal"
             href="#"
             class="btn btn-primary btn-sm"
           >
@@ -26,6 +26,9 @@
             <tr>
               <th>ID</th>
               <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -33,13 +36,26 @@
             <% employees.forEach(function(employee) { %>
             <tr>
               <td><%= employee.id %></td>
-              <td><%= employee.name %></td>
+              <td><%= employee.firstName + " " + employee.lastName %></td>
+              <td><%= employee.email %></td>
+              <td><%= employee.phone %></td>
+              <td>
+                <% var className = employee.status === 'active' ? 'success' :
+                'danger'; %>
+                <a
+                  href="#"
+                  class="btn btn-<%= className %> btn-xs text-capitalize statusChange"
+                  data-status="<%= employee.status %>"
+                  data-id="<%= employee.id %>"
+                  ><%= employee.status %></a
+                >
+              </td>
               <td>
                 <a href="#" class="btn btn-info btn-xs">
                   <i class="fas fa-info-circle"></i> View
                 </a>
                 <a
-                  class="btn updateRecord btn-primary btn-xs"
+                  class="btn updateEmployee btn-primary btn-xs"
                   data-id="<%= employee.id %>"
                 >
                   <i class="fas fa-edit"></i> Edit
@@ -47,7 +63,7 @@
                 <a
                   href="#"
                   data-id="<%= employee.id %>"
-                  class="deleteRecord btn btn-danger btn-xs"
+                  class="deleteEmployee btn btn-danger btn-xs"
                 >
                   <i class="fas fa-trash"></i> Delete
                 </a>
@@ -59,6 +75,9 @@
             <tr>
               <th>ID</th>
               <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </tfoot>
@@ -83,8 +102,60 @@
       .buttons()
       .container();
 
+    $(".statusChange").click(function () {
+      const employeeId = $(this).data("id");
+      const currentStatus = $(this).data("status");
+      const updateStatus = currentStatus == "active" ? "inactive" : "active";
+      Swal.fire({
+        title: "Are you sure?",
+        text: `Want to change status ${currentStatus} to ${updateStatus}`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, change it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // AJAX request to delete permission
+          $.ajax({
+            url: "<%= baseUrl %>employee/status/" + employeeId,
+            type: "PATCH",
+            data: { status: updateStatus },
+            success: function (response, textStatus, xhr) {
+              if (xhr.status == 200) {
+                Swal.fire({
+                  title: "Status changed!",
+                  text: "<%= singleTitle %> has been updated successfully.",
+                  icon: "success",
+                  timer: 1500,
+                  showConfirmButton: false,
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  title: "Error!",
+                  text: response.message || "Failed to update employee status.",
+                  icon: "error",
+                });
+              }
+            },
+            error: function (xhr) {
+              Swal.fire({
+                title: "Error!",
+                text:
+                  xhr.responseJSON?.message ||
+                  "An error occurred while updating the employee.",
+                icon: "error",
+              });
+            },
+          });
+        }
+      });
+    });
+
     // Delete functionality with SweetAlert
-    $(".deleteRecord").click(function () {
+    $(".deleteEmployee").click(function () {
       const employeeId = $(this).data("id");
       Swal.fire({
         title: "Are you sure?",
@@ -134,7 +205,7 @@
     });
 
     // Update functionality with SweetAlert
-    $(".updateRecord").click(function () {
+    $(".updateEmployee").click(function () {
       const employeeId = $(this).data("id");
       $.ajax({
         url: "<%= baseUrl %>employee/read/" + employeeId,
@@ -142,15 +213,21 @@
         success: function (response) {
           const data = response.data;
           console.log(response);
-          $("#updateRecordModal").modal("show");
-          $("#updateRecordForm input[name=name]").val(data.name);
+          $("#updateEmployeeModal").modal("show");
+          $("#updateEmployeeForm input[name=firstName]").val(data.firstName);
+          $("#updateEmployeeForm input[name=lastName]").val(data.lastName);
+          $("#updateEmployeeForm input[name=phone]").val(data.phone);
+          $("#updateEmployeeForm input[name=email]").val(data.email);
           $(".employeeIdUpdate").text(data.id);
 
-          $("#updateRecordForm").submit(function (event) {
+          $("#updateEmployeeForm").submit(function (event) {
             event.preventDefault();
 
             const formData = {
-              name: $("#updateRecordForm input[name=name]").val(),
+              firstName: $("#updateEmployeeForm input[name=firstName]").val(),
+              lastName: $("#updateEmployeeForm input[name=lastName]").val(),
+              phone: $("#updateEmployeeForm input[name=phone]").val(),
+              email: $("#updateEmployeeForm input[name=email]").val(),
             };
 
             $.ajax({

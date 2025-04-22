@@ -20,5 +20,6 @@ router.post("/employee/create", EmployeeController.createEmployeeAPI);
 router.patch("/employee/update/:id", EmployeeController.updateEmployeeAPI);
 router.get("/employee/read/:id", EmployeeController.readEmployeeAPI);
 router.delete("/employee/delete/:id", EmployeeController.deleteEmployeeAPI);
+router.patch("/employee/status/:id", EmployeeController.updateEmployeeStatusAPI);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-<div class="modal fade" id="updateRecordModal">
+<div class="modal fade" id="updateEmployeeModal">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -16,16 +16,28 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="updateRecordForm">
+        <form id="updateEmployeeForm">
+
           <div class="form-group">
-            <label for="name">Name</label>
-            <input
-              type="text"
-              class="form-control"
-              name="name"
-              placeholder="Enter name"
-            />
+            <label for="firstName">First Name</label>
+            <input type="text" class="form-control form-control-sm" name="firstName" />
           </div>
+
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" class="form-control form-control-sm" name="lastName" />
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" class="form-control form-control-sm" name="phone" />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control form-control-sm" name="email" />
+          </div>
+          
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
       </div>

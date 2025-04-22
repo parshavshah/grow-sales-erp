@@ -1,0 +1,5 @@
+- Add read in record module
+- Add read in employee module
+- Employee email unique validation
+- Send email notification on employee create
+- 

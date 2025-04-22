@@ -9,11 +9,15 @@ const EMPLOYEE_MODEL = User;
 // Validation schemas
 const EMPLOYEE_VALIDATION_SCHEMA = Joi.object({
   email: Joi.string().required().trim().email(),
-  passwordHash: Joi.string().required().trim(),
+  passwordHash: Joi.string().optional().trim(),
   firstName: Joi.string().required().trim(),
   lastName: Joi.string().required().trim(),
   phone: Joi.string().optional().trim(),
   profileImage: Joi.string().optional().trim(),
+  status: Joi.string().optional().trim(),
+});
+
+const EMPLOYEE_STATUS_SCHEMA = Joi.object({
   status: Joi.string().optional().trim(),
 });
 
@@ -130,6 +134,62 @@ module.exports = {
       res.status(200).json({
         message: `${MODULE_TITLE_SINGLE} updated successfully`,
         data: updatedEmployee,
+      });
+    } catch (error) {
+      console.error(`Error updating ${MODULE_TITLE_SINGLE}:`, error);
+      res.status(500).json({
+        message: `Failed to update ${MODULE_TITLE_SINGLE}`,
+        error: error.message,
+      });
+    }
+  },
+
+  /**
+   * Update an status of the employee
+   * @param {Object} req - Express request object
+   * @param {Object} res - Express response object
+   */
+  updateEmployeeStatusAPI: async (req, res) => {
+    try {
+
+      console.log(req.body)
+      // Validate body
+      const { error, value } = EMPLOYEE_STATUS_SCHEMA.validate(req.body, {
+        abortEarly: false,
+        stripUnknown: true,
+      });
+
+      console.log({ value });
+
+      if (error) {
+        return res.status(400).json({
+          message: error.details[0].message,
+          errors: "Validation error",
+        });
+      }
+
+      console.log({ value });
+
+      const employee = await EMPLOYEE_MODEL.findByPk(req.params.id);
+      if (!employee) {
+        return res.status(404).json({
+          message: `${MODULE_TITLE_SINGLE} not found`,
+        });
+      }
+
+      const [updatedRows] = await EMPLOYEE_MODEL.update(value, {
+        where: { id: req.params.id },
+        returning: true,
+      });
+
+      if (updatedRows === 0) {
+        return res.status(400).json({
+          message: `Failed to update ${MODULE_TITLE_SINGLE}`,
+        });
+      }
+
+      res.status(200).json({
+        message: `${MODULE_TITLE_SINGLE} updated successfully`,
       });
     } catch (error) {
       console.error(`Error updating ${MODULE_TITLE_SINGLE}:`, error);
