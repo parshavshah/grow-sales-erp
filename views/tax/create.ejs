@@ -1,0 +1,87 @@
+<div class="modal fade" id="createTaxModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><%= singleTitle %> Create</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="createTaxForm">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control form-control-sm" name="name" />
+          </div>
+
+          <div class="form-group">
+            <label for="value">Value</label>
+            <input type="number" class="form-control form-control-sm" name="value" step="0.01" />
+          </div>
+
+          <div class="form-group">
+            <label for="type">Type</label>
+            <input type="text" class="form-control form-control-sm" name="type" />
+          </div>
+
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    const form = document.getElementById("createTaxForm");
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const formData = {
+        name: $("input[name=name]").val(),
+        value: $("input[name=value]").val(),
+        type: $("input[name=type]").val(),
+      };
+
+      $.ajax({
+        url: "<%= baseUrl %>tax/create",
+        type: "POST",
+        data: JSON.stringify(formData),
+        contentType: "application/json",
+        success: function (response, textStatus, xhr) {
+          console.log(response);
+          if (xhr.status == 201) {
+            Swal.fire({
+              title: "Success!",
+              text: response.message,
+              icon: "success",
+              confirmButtonText: "OK",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                location.reload();
+              }
+            });
+          }
+        },
+        error: function (xhr) {
+          let errorMessage = "An error occurred while creating the tax.";
+          if (xhr.responseJSON && xhr.responseJSON.message) {
+            errorMessage = xhr.responseJSON.message;
+          }
+          Swal.fire({
+            title: "Error!",
+            text: errorMessage,
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        },
+      });
+    });
+  });
+</script>
