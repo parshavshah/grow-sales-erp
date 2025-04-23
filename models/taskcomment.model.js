@@ -26,6 +26,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "taskcomments",
       timestamps: true,
     }
-  ).sync({ alter: true });
+  );
   return TaskComment;
 };

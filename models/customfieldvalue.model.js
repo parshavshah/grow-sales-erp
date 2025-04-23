@@ -18,6 +18,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "customfieldvalues",
       timestamps: true,
     }
-  ).sync({ alter: true });
+  );
   return CustomFieldValue;
 };

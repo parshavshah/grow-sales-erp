@@ -16,6 +16,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "producttaxes",
       timestamps: true,
     }
-  ).sync({ alter: true });
+  );
   return ProductTax;
 };

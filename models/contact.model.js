@@ -35,6 +35,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "contacts",
       timestamps: true,
     }
-  ).sync({ alter: true });
+  );
   return Contact;
 };

@@ -18,6 +18,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "systemsettings",
       timestamps: true,
     }
-  ).sync({ alter: true });
+  );
   return SystemSetting;
 };

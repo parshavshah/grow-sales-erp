@@ -31,6 +31,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "quotations",
       timestamps: true,
     }
-  ).sync({ alter: true });
+  );
   return Quotation;
 };

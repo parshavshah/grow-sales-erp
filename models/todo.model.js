@@ -18,6 +18,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "todos",
       timestamps: true,
     }
-  ).sync({ alter: true });
+  );
   return ToDo;
 };

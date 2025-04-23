@@ -16,6 +16,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "rolepermissions",
       timestamps: true,
     }
-  ).sync({ alter: true });
+  );
   return RolePermission;
 };

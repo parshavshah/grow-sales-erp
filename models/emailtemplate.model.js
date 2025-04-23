@@ -20,6 +20,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "emailtemplates",
       timestamps: true,
     }
-  ).sync({ alter: true });
+  );
   return EmailTemplate;
 };

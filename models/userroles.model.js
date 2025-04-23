@@ -16,6 +16,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "userroles",
       timestamps: true,
     }
-  ).sync({ alter: true });
+  );
   return UserRole;
 };

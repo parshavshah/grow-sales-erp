@@ -41,3 +41,12 @@
 
 - after creating migrations create seeders
 
+
+
+
+// {
+//   "development": {
+//     "dialect": "sqlite",
+//     "storage": "db.sqlite3"
+//   }
+// }

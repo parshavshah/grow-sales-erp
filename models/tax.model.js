@@ -17,6 +17,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "taxes",
       timestamps: true,
     }
-  ).sync({ alter: true });
+  );
   return Tax;
 };

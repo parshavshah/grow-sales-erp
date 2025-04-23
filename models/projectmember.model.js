@@ -20,6 +20,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "projectmembers",
       timestamps: true,
     }
-  ).sync({ alter: true });
+  );
   return ProjectMember;
 };

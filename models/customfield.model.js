@@ -22,6 +22,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "customfields",
       timestamps: true,
     }
-  ).sync({ alter: true });
+  );
   return CustomField;
 };
