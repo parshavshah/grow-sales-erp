@@ -11,6 +11,7 @@ const CustomFieldController = require("../controllers/customfield.controller");
 const ContactController = require("../controllers/contact.controller");
 const ExpenseCategoryController = require("../controllers/expensecategory.controller");
 const ExpenseController = require("../controllers/expense.controller");
+const PaymentController = require("../controllers/payment.controller");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -90,5 +91,13 @@ router.patch("/expense/update/:id", ExpenseController.updateExpenseAPI);
 router.get("/expense/read/:id", ExpenseController.readExpenseAPI);
 router.delete("/expense/delete/:id", ExpenseController.deleteExpenseAPI);
 router.patch("/expense/status/:id", ExpenseController.updateExpenseStatusAPI);
+
+// Payment routes
+router.get("/payment/list", PaymentController.listPaymentView);
+router.post("/payment/create", PaymentController.createPaymentAPI);
+router.patch("/payment/update/:id", PaymentController.updatePaymentAPI);
+router.get("/payment/read/:id", PaymentController.readPaymentAPI);
+router.delete("/payment/delete/:id", PaymentController.deletePaymentAPI);
+router.patch("/payment/status/:id", PaymentController.updatePaymentStatusAPI);
 
 module.exports = router;

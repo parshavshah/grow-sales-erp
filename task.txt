@@ -26,6 +26,8 @@
 - after creating migrations create seeders
 - remove email required from the lead create / edit page
 - update assigned to in contacts (create / edit)
+- notes and payment data not working in edit / create in payment module
+
 
 
 
