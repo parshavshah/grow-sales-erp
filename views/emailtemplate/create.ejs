@@ -1,0 +1,100 @@
+<div class="modal fade" id="createEmailTemplateModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><%= singleTitle %> Create</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="createEmailTemplateForm">
+          
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control form-control-sm" name="name" />
+          </div>
+
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" class="form-control form-control-sm" name="subject" />
+          </div>
+
+          <div class="form-group">
+            <label for="body">Body</label>
+            <textarea class="form-control form-control-sm" name="body" rows="5"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control form-control-sm" name="description" rows="3"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="category">Category</label>
+            <input type="text" class="form-control form-control-sm" name="category" />
+          </div>
+
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    const form = document.getElementById("createEmailTemplateForm");
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const formData = {
+        name: $("input[name=name]").val(),
+        subject: $("input[name=subject]").val(),
+        body: $("textarea[name=body]").val(),
+        description: $("textarea[name=description]").val(),
+        category: $("input[name=category]").val(),
+      };
+
+      $.ajax({
+        url: "<%= baseUrl %>emailtemplate/create",
+        type: "POST",
+        data: JSON.stringify(formData),
+        contentType: "application/json",
+        success: function (response, textStatus, xhr) {
+          console.log(response);
+          if (xhr.status == 201) {
+            Swal.fire({
+              title: "Success!",
+              text: response.message,
+              icon: "success",
+              confirmButtonText: "OK",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                location.reload();
+              }
+            });
+          }
+        },
+        error: function (xhr) {
+          let errorMessage = "An error occurred while creating the email template.";
+          if (xhr.responseJSON && xhr.responseJSON.message) {
+            errorMessage = xhr.responseJSON.message;
+          }
+          Swal.fire({
+            title: "Error!",
+            text: errorMessage,
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        },
+      });
+    });
+  });
+</script> 

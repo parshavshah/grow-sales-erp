@@ -1,0 +1,273 @@
+<div class="content-wrapper">
+  <%- include('../partials/page_title'); %> <%- include('./create'); %> <%- include('./update'); %>
+  <section class="content">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title mt-1"><b><%= title %> List</b></h3>
+        <div class="card-tools pr-2">
+          <a
+            data-toggle="modal"
+            data-target="#createEmailTemplateModal"
+            href="#"
+            class="btn btn-primary btn-sm"
+          >
+            <i class="fas fa-plus"></i> Add New <%= singleTitle %>
+          </a>
+        </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table
+          id="emailTemplateList"
+          class="table table-bordered table-sm table-striped"
+        >
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Subject</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% emailTemplates.forEach(function(emailTemplate) { %>
+            <tr>
+              <td><%= emailTemplate.id %></td>
+              <td><%= emailTemplate.name %></td>
+              <td><%= emailTemplate.subject %></td>
+              <td><%= emailTemplate.category %></td>
+              <td>
+                <% var className = emailTemplate.status === 'active' ? 'success' : 'danger'; %>
+                <a
+                  href="#"
+                  class="btn btn-<%= className %> btn-xs text-capitalize statusChange"
+                  data-status="<%= emailTemplate.status %>"
+                  data-id="<%= emailTemplate.id %>"
+                  ><%= emailTemplate.status %></a
+                >
+              </td>
+              <td>
+                <a href="#" class="btn btn-info btn-xs">
+                  <i class="fas fa-info-circle"></i> View
+                </a>
+                <a
+                  class="btn updateEmailTemplate btn-primary btn-xs"
+                  data-id="<%= emailTemplate.id %>"
+                >
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+                <a
+                  href="#"
+                  data-id="<%= emailTemplate.id %>"
+                  class="deleteEmailTemplate btn btn-danger btn-xs"
+                >
+                  <i class="fas fa-trash"></i> Delete
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Subject</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  $(function () {
+    // datatable code
+    $("#emailTemplateList")
+      .DataTable({
+        responsive: true,
+        lengthChange: false,
+        autoWidth: false,
+        order: false,
+        pageLength: 10,
+        lengthChange: true,
+      })
+      .buttons()
+      .container();
+
+    $(".statusChange").click(function () {
+      const emailTemplateId = $(this).data("id");
+      const currentStatus = $(this).data("status");
+      const updateStatus = currentStatus == "active" ? "inactive" : "active";
+      Swal.fire({
+        title: "Are you sure?",
+        text: `Want to change status ${currentStatus} to ${updateStatus}`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, change it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // AJAX request to delete permission
+          $.ajax({
+            url: "<%= baseUrl %>emailtemplate/status/" + emailTemplateId,
+            type: "PATCH",
+            data: { status: updateStatus },
+            success: function (response, textStatus, xhr) {
+              if (xhr.status == 200) {
+                Swal.fire({
+                  title: "Status changed!",
+                  text: "<%= singleTitle %> has been updated successfully.",
+                  icon: "success",
+                  timer: 1500,
+                  showConfirmButton: false,
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  title: "Error!",
+                  text: response.message || "Failed to update email template status.",
+                  icon: "error",
+                });
+              }
+            },
+            error: function (xhr) {
+              Swal.fire({
+                title: "Error!",
+                text:
+                  xhr.responseJSON?.message ||
+                  "An error occurred while updating the email template.",
+                icon: "error",
+              });
+            },
+          });
+        }
+      });
+    });
+
+    // Delete functionality with SweetAlert
+    $(".deleteEmailTemplate").click(function () {
+      const emailTemplateId = $(this).data("id");
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // AJAX request to delete permission
+          $.ajax({
+            url: "<%= baseUrl %>emailtemplate/delete/" + emailTemplateId,
+            type: "DELETE",
+            success: function (response, textStatus, xhr) {
+              if (xhr.status == 200) {
+                Swal.fire({
+                  title: "Deleted!",
+                  text: "<%= singleTitle %> has been deleted successfully.",
+                  icon: "success",
+                  timer: 1500,
+                  showConfirmButton: false,
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  title: "Error!",
+                  text: response.message || "Failed to delete item.",
+                  icon: "error",
+                });
+              }
+            },
+            error: function (xhr) {
+              Swal.fire({
+                title: "Error!",
+                text:
+                  xhr.responseJSON?.message ||
+                  "An error occurred while deleting the item.",
+                icon: "error",
+              });
+            },
+          });
+        }
+      });
+    });
+
+    // Update functionality with SweetAlert
+    $(".updateEmailTemplate").click(function () {
+      const emailTemplateId = $(this).data("id");
+      $.ajax({
+        url: "<%= baseUrl %>emailtemplate/read/" + emailTemplateId,
+        type: "GET",
+        success: function (response) {
+          const data = response.data;
+          console.log(response);
+          $("#updateEmailTemplateModal").modal("show");
+          $("#updateEmailTemplateForm input[name=name]").val(data.name);
+          $("#updateEmailTemplateForm input[name=subject]").val(data.subject);
+          $("#updateEmailTemplateForm textarea[name=body]").val(data.body);
+          $("#updateEmailTemplateForm textarea[name=description]").val(data.description);
+          $("#updateEmailTemplateForm input[name=category]").val(data.category);
+          $(".emailTemplateIdUpdate").text(data.id);
+
+          $("#updateEmailTemplateForm").submit(function (event) {
+            event.preventDefault();
+
+            const formData = {
+              name: $("#updateEmailTemplateForm input[name=name]").val(),
+              subject: $("#updateEmailTemplateForm input[name=subject]").val(),
+              body: $("#updateEmailTemplateForm textarea[name=body]").val(),
+              description: $("#updateEmailTemplateForm textarea[name=description]").val(),
+              category: $("#updateEmailTemplateForm input[name=category]").val(),
+            };
+
+            $.ajax({
+              url: "<%= baseUrl %>emailtemplate/update/" + emailTemplateId,
+              type: "PATCH",
+              data: JSON.stringify(formData),
+              contentType: "application/json",
+              success: function (response, textStatus, xhr) {
+                if (xhr.status == 200) {
+                  Swal.fire({
+                    title: "Success!",
+                    text: response.message,
+                    icon: "success",
+                    confirmButtonText: "OK",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      location.reload();
+                    }
+                  });
+                }
+              },
+              error: function (xhr) {
+                let errorMessage = "An error occurred while creating the role.";
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                  errorMessage = xhr.responseJSON.message;
+                }
+                Swal.fire({
+                  title: "Error!",
+                  text: errorMessage,
+                  icon: "error",
+                  confirmButtonText: "OK",
+                });
+              },
+            });
+          });
+        },
+        error: function (xhr) {
+          console.error(xhr);
+        },
+      });
+    });
+  });
+</script> 

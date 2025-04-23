@@ -14,6 +14,7 @@ const ExpenseController = require("../controllers/expense.controller");
 const PaymentController = require("../controllers/payment.controller");
 const ProductController = require("../controllers/product.controller");
 const TodoController = require("../controllers/todo.controller");
+const EmailTemplateController = require("../controllers/emailtemplate.controller");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -117,5 +118,13 @@ router.patch("/product/update/:id", ProductController.updateProductAPI);
 router.get("/product/read/:id", ProductController.readProductAPI);
 router.delete("/product/delete/:id", ProductController.deleteProductAPI);
 router.patch("/product/status/:id", ProductController.updateProductStatusAPI);
+
+// Email Template Routes
+router.get("/emailtemplate/list", EmailTemplateController.listEmailTemplateView);
+router.post("/emailtemplate/create", EmailTemplateController.createEmailTemplateAPI);
+router.patch("/emailtemplate/update/:id", EmailTemplateController.updateEmailTemplateAPI);
+router.get("/emailtemplate/read/:id", EmailTemplateController.readEmailTemplateAPI);
+router.delete("/emailtemplate/delete/:id", EmailTemplateController.deleteEmailTemplateAPI);
+router.patch("/emailtemplate/status/:id", EmailTemplateController.updateEmailTemplateStatusAPI);
 
 module.exports = router;
