@@ -13,6 +13,7 @@ const ExpenseCategoryController = require("../controllers/expensecategory.contro
 const ExpenseController = require("../controllers/expense.controller");
 const PaymentController = require("../controllers/payment.controller");
 const ProductController = require("../controllers/product.controller");
+const TodoController = require("../controllers/todo.controller");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -31,6 +32,14 @@ router.patch("/employee/update/:id", EmployeeController.updateEmployeeAPI);
 router.get("/employee/read/:id", EmployeeController.readEmployeeAPI);
 router.delete("/employee/delete/:id", EmployeeController.deleteEmployeeAPI);
 router.patch("/employee/status/:id", EmployeeController.updateEmployeeStatusAPI);
+
+// Todo routes
+router.get("/todo/list", TodoController.listTodoView);
+router.post("/todo/create", TodoController.createTodoAPI);
+router.patch("/todo/update/:id", TodoController.updateTodoAPI);
+router.get("/todo/read/:id", TodoController.readTodoAPI);
+router.delete("/todo/delete/:id", TodoController.deleteTodoAPI);
+router.patch("/todo/status/:id", TodoController.updateTodoStatusAPI);
 
 router.get("/tax/list", TaxController.listTaxView);
 router.post("/tax/create", TaxController.createTaxAPI);
