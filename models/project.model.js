@@ -3,19 +3,7 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Project extends Model {
     static associate(models) {
-      // Define associations here
-      Project.belongsTo(models.User, {
-        foreignKey: "createdBy",
-        as: "creator",
-      });
-      Project.belongsTo(models.User, {
-        foreignKey: "assignedTo",
-        as: "assignee",
-      });
-      Project.belongsTo(models.Account, {
-        foreignKey: "accountId",
-        as: "account",
-      });
+      
     }
   }
   Project.init(

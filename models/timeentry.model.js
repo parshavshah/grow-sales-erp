@@ -3,9 +3,7 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class TimeEntry extends Model {
     static associate(models) {
-      // Define associations here
-      TimeEntry.belongsTo(models.Task, { foreignKey: "taskId", as: "task" });
-      TimeEntry.belongsTo(models.User, { foreignKey: "userId", as: "user" });
+      
     }
   }
   TimeEntry.init(
