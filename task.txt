@@ -25,6 +25,7 @@
 - after creation model create the migrations
 - after creating migrations create seeders
 - remove email required from the lead create / edit page
+- update assigned to in contacts (create / edit)
 
 
 

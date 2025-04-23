@@ -1,0 +1,228 @@
+<div class="content-wrapper">
+  <%- include('../partials/page_title'); %> <%- include('./create'); %> <%- include('./update'); %>
+  <section class="content">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title mt-1"><b><%= title %> List</b></h3>
+        <div class="card-tools pr-2">
+          <a
+            data-toggle="modal"
+            data-target="#createAccountModal"
+            href="#"
+            class="btn btn-primary btn-sm"
+          >
+            <i class="fas fa-plus"></i> Add New <%= singleTitle %>
+          </a>
+        </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table
+          id="accountList"
+          class="table table-bordered table-sm table-striped"
+        >
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Account Type</th>
+              <th>Website</th>
+              <th>Industry</th>
+              <th>Phone</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% accounts.forEach(function(account) { %>
+            <tr>
+              <td><%= account.id %></td>
+              <td><%= account.name %></td>
+              <td><%= account.accountType %></td>
+              <td><%= account.website %></td>
+              <td><%= account.industry %></td>
+              <td><%= account.phone %></td>
+              <td>
+                <a href="#" class="btn btn-info btn-xs">
+                  <i class="fas fa-info-circle"></i> View
+                </a>
+                <a
+                  class="btn updateAccount btn-primary btn-xs"
+                  data-id="<%= account.id %>"
+                >
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+                <a
+                  href="#"
+                  data-id="<%= account.id %>"
+                  class="deleteAccount btn btn-danger btn-xs"
+                >
+                  <i class="fas fa-trash"></i> Delete
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Account Type</th>
+              <th>Website</th>
+              <th>Industry</th>
+              <th>Phone</th>
+              <th>Actions</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  $(function () {
+    // datatable code
+    $("#accountList")
+      .DataTable({
+        responsive: true,
+        lengthChange: false,
+        autoWidth: false,
+        order: false,
+        pageLength: 10,
+        lengthChange: true,
+      })
+      .buttons()
+      .container();
+
+    // Delete functionality with SweetAlert
+    $(".deleteAccount").click(function () {
+      const accountId = $(this).data("id");
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // AJAX request to delete account
+          $.ajax({
+            url: "<%= baseUrl %>account/delete/" + accountId,
+            type: "DELETE",
+            success: function (response, textStatus, xhr) {
+              if (xhr.status == 200) {
+                Swal.fire({
+                  title: "Deleted!",
+                  text: "<%= singleTitle %> has been deleted successfully.",
+                  icon: "success",
+                  timer: 1500,
+                  showConfirmButton: false,
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  title: "Error!",
+                  text: response.message || "Failed to delete item.",
+                  icon: "error",
+                });
+              }
+            },
+            error: function (xhr) {
+              Swal.fire({
+                title: "Error!",
+                text:
+                  xhr.responseJSON?.message ||
+                  "An error occurred while deleting the item.",
+                icon: "error",
+              });
+            },
+          });
+        }
+      });
+    });
+
+    // Update functionality with SweetAlert
+    $(".updateAccount").click(function () {
+      const accountId = $(this).data("id");
+      $.ajax({
+        url: "<%= baseUrl %>account/read/" + accountId,
+        type: "GET",
+        success: function (response) {
+          const data = response.data;
+          $("#updateAccountModal").modal("show");
+          $("#updateAccountForm input[name=name]").val(data.name);
+          $("#updateAccountForm input[name=accountType]").val(data.accountType);
+          $("#updateAccountForm input[name=website]").val(data.website);
+          $("#updateAccountForm input[name=industry]").val(data.industry);
+          $("#updateAccountForm input[name=phone]").val(data.phone);
+          $("#updateAccountForm input[name=address]").val(data.address);
+          $("#updateAccountForm input[name=city]").val(data.city);
+          $("#updateAccountForm input[name=state]").val(data.state);
+          $("#updateAccountForm input[name=zip]").val(data.zip);
+          $("#updateAccountForm input[name=country]").val(data.country);
+          $("#updateAccountForm textarea[name=description]").val(data.description);
+          $(".accountIdUpdate").text(data.id);
+
+          $("#updateAccountForm").submit(function (event) {
+            event.preventDefault();
+
+            const formData = {
+              name: $("#updateAccountForm input[name=name]").val(),
+              accountType: $("#updateAccountForm input[name=accountType]").val(),
+              website: $("#updateAccountForm input[name=website]").val(),
+              industry: $("#updateAccountForm input[name=industry]").val(),
+              phone: $("#updateAccountForm input[name=phone]").val(),
+              address: $("#updateAccountForm input[name=address]").val(),
+              city: $("#updateAccountForm input[name=city]").val(),
+              state: $("#updateAccountForm input[name=state]").val(),
+              zip: $("#updateAccountForm input[name=zip]").val(),
+              country: $("#updateAccountForm input[name=country]").val(),
+              description: $("#updateAccountForm textarea[name=description]").val(),
+            };
+
+            $.ajax({
+              url: "<%= baseUrl %>account/update/" + accountId,
+              type: "PATCH",
+              data: JSON.stringify(formData),
+              contentType: "application/json",
+              success: function (response, textStatus, xhr) {
+                if (xhr.status == 200) {
+                  Swal.fire({
+                    title: "Success!",
+                    text: response.message,
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false,
+                  }).then(() => {
+                    location.reload();
+                  });
+                }
+              },
+              error: function (xhr) {
+                Swal.fire({
+                  title: "Error!",
+                  text:
+                    xhr.responseJSON?.message ||
+                    "An error occurred while updating the account.",
+                  icon: "error",
+                });
+              },
+            });
+          });
+        },
+        error: function (xhr) {
+          Swal.fire({
+            title: "Error!",
+            text:
+              xhr.responseJSON?.message ||
+              "An error occurred while fetching the account.",
+            icon: "error",
+          });
+        },
+      });
+    });
+  });
+</script> 

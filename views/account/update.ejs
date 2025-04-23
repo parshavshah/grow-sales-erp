@@ -1,0 +1,165 @@
+<div class="modal fade" id="updateAccountModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><%= singleTitle %> Update</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="updateAccountForm">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="name"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="accountType">Account Type</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="accountType"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="website">Website</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="website"
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="industry">Industry</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="industry"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="phone"
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="assignedTo">Assigned To</label>
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  name="assignedTo"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="address">Address</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="address"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="city">City</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="city"
+                />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="state">State</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="state"
+                />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="zip">ZIP</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="zip"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="country">Country</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="country"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="description">Description</label>
+                <textarea
+                  class="form-control form-control-sm"
+                  name="description"
+                  rows="3"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div> 

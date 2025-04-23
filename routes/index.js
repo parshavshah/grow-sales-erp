@@ -6,6 +6,7 @@ const EmployeeController = require("../controllers/employee.controller");
 const TaxController = require("../controllers/tax.controller");
 const PaymentMethodController = require("../controllers/paymentmethod.controller");
 const LeadController = require("../controllers/lead.controller");
+const AccountController = require("../controllers/account.controller");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -45,5 +46,13 @@ router.patch("/lead/update/:id", LeadController.updateLeadAPI);
 router.get("/lead/read/:id", LeadController.readLeadAPI);
 router.delete("/lead/delete/:id", LeadController.deleteLeadAPI);
 router.patch("/lead/status/:id", LeadController.updateLeadStatusAPI);
+
+// Account routes
+router.get("/account/list", AccountController.listAccountView);
+router.post("/account/create", AccountController.createAccountAPI);
+router.patch("/account/update/:id", AccountController.updateAccountAPI);
+router.get("/account/read/:id", AccountController.readAccountAPI);
+router.delete("/account/delete/:id", AccountController.deleteAccountAPI);
+router.patch("/account/status/:id", AccountController.updateAccountStatusAPI);
 
 module.exports = router;
