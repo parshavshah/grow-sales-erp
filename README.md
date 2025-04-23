@@ -167,46 +167,43 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 
 ### `contacts`
 
-| Column     | Type         | Constraints                      | Description                                         |
-| ---------- | ------------ | -------------------------------- | --------------------------------------------------- |
-| id         | INT          | PRIMARY KEY, AUTOINCREMENT       | Unique contact identifier                           |
-| accountId  | INT          | FOREIGN KEY (accounts.id)        | Associated account/customer                         |
-| firstName  | VARCHAR(255) | NOT NULL                         | Contact's first name                                |
-| lastName   | VARCHAR(255) | NOT NULL                         | Contact's last name                                 |
-| email      | VARCHAR(255) |                                  | Contact's email                                     |
-| phone      | VARCHAR(255) |                                  | Contact's phone number                              |
-| mobile     | VARCHAR(255) |                                  | Contact's mobile number                             |
-| jobTitle   | VARCHAR(255) |                                  | Contact's job title                                 |
-| department | VARCHAR(255) |                                  | Department                                          |
-| address    | TEXT         |                                  | Address                                             |
-| city       | VARCHAR(255) |                                  | City                                                |
-| state      | VARCHAR(255) |                                  | State/Province                                      |
-| zip        | VARCHAR(255) |                                  | ZIP/Postal code                                     |
-| country    | VARCHAR(255) |                                  | Country                                             |
-| isPrimary  | BOOLEAN      | DEFAULT FALSE                    | Whether this is the primary contact for the account |
-| assignedTo | INT          | FOREIGN KEY (users.id)           | User responsible for this contact                   |
-| createdBy  | INT          | FOREIGN KEY (users.id), NOT NULL | User who created this contact                       |
+| Column     | Type         | Constraints                      | Description                       |
+| ---------- | ------------ | -------------------------------- | --------------------------------- |
+| id         | INT          | PRIMARY KEY, AUTOINCREMENT       | Unique contact identifier         |
+| accountId  | INT          | FOREIGN KEY (accounts.id)        | Associated account/customer       |
+| firstName  | VARCHAR(255) | NOT NULL                         | Contact's first name              |
+| lastName   | VARCHAR(255) | NOT NULL                         | Contact's last name               |
+| email      | VARCHAR(255) |                                  | Contact's email                   |
+| phone      | VARCHAR(255) |                                  | Contact's phone number            |
+| mobile     | VARCHAR(255) |                                  | Contact's mobile number           |
+| jobTitle   | VARCHAR(255) |                                  | Contact's job title               |
+| department | VARCHAR(255) |                                  | Department                        |
+| address    | TEXT         |                                  | Address                           |
+| city       | VARCHAR(255) |                                  | City                              |
+| state      | VARCHAR(255) |                                  | State/Province                    |
+| zip        | VARCHAR(255) |                                  | ZIP/Postal code                   |
+| country    | VARCHAR(255) |                                  | Country                           |
+| assignedTo | INT          | FOREIGN KEY (users.id)           | User responsible for this contact |
+| createdBy  | INT          | FOREIGN KEY (users.id), NOT NULL | User who created this contact     |
 
 ### `accounts`
 
-| Column        | Type          | Constraints                      | Description                       |
-| ------------- | ------------- | -------------------------------- | --------------------------------- |
-| id            | INT           | PRIMARY KEY, AUTOINCREMENT       | Unique account identifier         |
-| name          | VARCHAR(255)  | NOT NULL                         | Account/company name              |
-| accountType   | VARCHAR(255)  |                                  | Type (Customer, Partner, etc.)    |
-| website       | VARCHAR(255)  |                                  | Company website                   |
-| industry      | VARCHAR(255)  |                                  | Industry sector                   |
-| annualRevenue | DECIMAL(15,2) |                                  | Annual revenue                    |
-| employeeCount | INT           |                                  | Number of employees               |
-| phone         | VARCHAR(255)  |                                  | Main phone number                 |
-| address       | TEXT          |                                  | Address                           |
-| city          | VARCHAR(255)  |                                  | City                              |
-| state         | VARCHAR(255)  |                                  | State/Province                    |
-| zip           | VARCHAR(255)  |                                  | ZIP/Postal code                   |
-| country       | VARCHAR(255)  |                                  | Country                           |
-| description   | TEXT          |                                  | Additional notes                  |
-| assignedTo    | INT           | FOREIGN KEY (users.id)           | User responsible for this account |
-| createdBy     | INT           | FOREIGN KEY (users.id), NOT NULL | User who created this account     |
+| Column      | Type         | Constraints                      | Description                       |
+| ----------- | ------------ | -------------------------------- | --------------------------------- |
+| id          | INT          | PRIMARY KEY, AUTOINCREMENT       | Unique account identifier         |
+| name        | VARCHAR(255) | NOT NULL                         | Account/company name              |
+| accountType | VARCHAR(255) |                                  | Type (Customer, Partner, etc.)    |
+| website     | VARCHAR(255) |                                  | Company website                   |
+| industry    | VARCHAR(255) |                                  | Industry sector                   |
+| phone       | VARCHAR(255) |                                  | Main phone number                 |
+| address     | TEXT         |                                  | Address                           |
+| city        | VARCHAR(255) |                                  | City                              |
+| state       | VARCHAR(255) |                                  | State/Province                    |
+| zip         | VARCHAR(255) |                                  | ZIP/Postal code                   |
+| country     | VARCHAR(255) |                                  | Country                           |
+| description | TEXT         |                                  | Additional notes                  |
+| assignedTo  | INT          | FOREIGN KEY (users.id)           | User responsible for this account |
+| createdBy   | INT          | FOREIGN KEY (users.id), NOT NULL | User who created this account     |
 
 ### `followups`
 
@@ -224,69 +221,53 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | assignedTo   | INT          | FOREIGN KEY (users.id), NOT NULL | User responsible                       |
 | createdBy    | INT          | FOREIGN KEY (users.id), NOT NULL | User who created this follow-up        |
 | completedAt  | TIMESTAMP    |                                  | When follow-up was completed           |
+| isResolved   | BOOLEAN      |                                  | is followup completed or not           |
 
 ### `notes`
 
-| Column     | Type         | Constraints                      | Description                                |
-| ---------- | ------------ | -------------------------------- | ------------------------------------------ |
-| id         | INT          | PRIMARY KEY, AUTOINCREMENT       | Unique note identifier                     |
-| entityType | VARCHAR(255) | NOT NULL                         | Entity type (lead, contact, account, etc.) |
-| entityId   | INT          | NOT NULL                         | ID of the entity                           |
-| title      | VARCHAR(255) |                                  | Note title                                 |
-| content    | TEXT         | NOT NULL                         | Note content                               |
-| createdBy  | INT          | FOREIGN KEY (users.id), NOT NULL | User who created this note                 |
+| Column      | Type         | Constraints                      | Description                                |
+| ----------- | ------------ | -------------------------------- | ------------------------------------------ |
+| id          | INT          | PRIMARY KEY, AUTOINCREMENT       | Unique note identifier                     |
+| entityType  | VARCHAR(255) | NOT NULL                         | Entity type (lead, contact, account, etc.) |
+| entityId    | INT          | NOT NULL                         | ID of the entity                           |
+| title       | VARCHAR(255) |                                  | Note title                                 |
+| description | TEXT         | NOT NULL                         | Note content                               |
+| createdBy   | INT          | FOREIGN KEY (users.id), NOT NULL | User who created this note                 |
 
 ## Sales Module
 
+### `taxes`
+
+| Column | Type         | Constraints                         | Description                                   |
+| ------ | ------------ | ----------------------------------- | --------------------------------------------- |
+| id     | INT          | PRIMARY KEY, AUTOINCREMENT          | Unique category identifier                    |
+| name   | VARCHAR(255) | NOT NULL                            | Category name                                 |
+| value  | FLOAT        |                                     | Category description                          |
+| type   | VARCHAR(255) | FOREIGN KEY (product_categories.id) | Parent category ID for hierarchical structure |
+
 ### `products`
 
-| Column        | Type          | Constraints                         | Description                    |
-| ------------- | ------------- | ----------------------------------- | ------------------------------ |
-| id            | INT           | PRIMARY KEY, AUTOINCREMENT          | Unique product identifier      |
-| name          | VARCHAR(255)  | NOT NULL                            | Product name                   |
-| sku           | VARCHAR(255)  | UNIQUE                              | Stock keeping unit             |
-| description   | TEXT          |                                     | Product description            |
-| type          | VARCHAR(255)  | DEFAULT 'Product'                   | Type (Product, Service)        |
-| categoryId    | INT           | FOREIGN KEY (product_categories.id) | Product category               |
-| unit          | VARCHAR(255)  |                                     | Unit of measurement            |
-| price         | DECIMAL(15,2) | NOT NULL                            | Standard price                 |
-| cost          | DECIMAL(15,2) |                                     | Cost price                     |
-| taxRate       | DECIMAL(5,2)  | DEFAULT 0                           | Default tax rate (%)           |
-| status        | BOOLEAN       | DEFAULT TRUE                        | Whether product is active      |
-| stockQuantity | INT           | DEFAULT 0                           | Current stock (for products)   |
-| minstocklevel | INT           | DEFAULT 0                           | Minimum stock level for alerts |
-| image         | VARCHAR(255)  |                                     | Path to product image          |
-| createdBy     | INT           | FOREIGN KEY (users.id), NOT NULL    | User who created this product  |
+| Column      | Type          | Constraints                      | Description                   |
+| ----------- | ------------- | -------------------------------- | ----------------------------- |
+| id          | INT           | PRIMARY KEY, AUTOINCREMENT       | Unique product identifier     |
+| name        | VARCHAR(255)  | NOT NULL                         | Product name                  |
+| sku         | VARCHAR(255)  | UNIQUE                           | Stock keeping unit            |
+| description | TEXT          |                                  | Product description           |
+| type        | VARCHAR(255)  | DEFAULT 'Product'                | Type (Product, Service)       |
+| unit        | VARCHAR(255)  |                                  | Unit of measurement           |
+| price       | DECIMAL(15,2) | NOT NULL                         | Standard price                |
+| cost        | DECIMAL(15,2) |                                  | Cost price                    |
+| status      | BOOLEAN       | DEFAULT TRUE                     | Whether product is active     |
+| image       | VARCHAR(255)  |                                  | Path to product image         |
+| createdBy   | INT           | FOREIGN KEY (users.id), NOT NULL | User who created this product |
 
-### `productcategories`
+### `producttaxes`
 
-| Column      | Type         | Constraints                         | Description                                   |
-| ----------- | ------------ | ----------------------------------- | --------------------------------------------- |
-| id          | INT          | PRIMARY KEY, AUTOINCREMENT          | Unique category identifier                    |
-| name        | VARCHAR(255) | NOT NULL                            | Category name                                 |
-| description | TEXT         |                                     | Category description                          |
-| parentId    | INT          | FOREIGN KEY (product_categories.id) | Parent category ID for hierarchical structure |
-
-### `pricelists`
-
-| Column      | Type         | Constraints                      | Description                      |
-| ----------- | ------------ | -------------------------------- | -------------------------------- |
-| id          | INT          | PRIMARY KEY, AUTOINCREMENT       | Unique price list identifier     |
-| name        | VARCHAR(255) | NOT NULL                         | Price list name                  |
-| description | TEXT         |                                  | Description                      |
-| status      | BOOLEAN      | DEFAULT TRUE                     | Whether price list is active     |
-| startDate   | DATE         |                                  | Start date of validity           |
-| endDate     | DATE         |                                  | End date of validity             |
-| createdBy   | INT          | FOREIGN KEY (users.id), NOT NULL | User who created this price list |
-
-### `pricelistitems`
-
-| Column      | Type          | Constraints                           | Description                  |
-| ----------- | ------------- | ------------------------------------- | ---------------------------- |
-| id          | INT           | PRIMARY KEY, AUTOINCREMENT            | Unique price item identifier |
-| priceListId | INT           | FOREIGN KEY (priceLists.id), NOT NULL | References price list        |
-| productId   | INT           | FOREIGN KEY (products.id), NOT NULL   | References product           |
-| price       | DECIMAL(15,2) | NOT NULL                              | Price in this list           |
+| Column    | Type | Constraints                | Description                |
+| --------- | ---- | -------------------------- | -------------------------- |
+| id        | INT  | PRIMARY KEY, AUTOINCREMENT | Unique category identifier |
+| productId | INT  | NOT NULL                   | Category name              |
+| taxId     | INT  |                            | Category description       |
 
 ### `quotations`
 
