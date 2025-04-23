@@ -25,17 +25,14 @@
 
 - create model for following tables
 - reminders
-- products
 - taxes
 - invoices
 - invoice_products
 - quotations
 - quotation_production
-- payments
-- expenses
 - projects
+- tasks
 - comments
 - timeEntry
-- todo
-- systemSettings
+- custom_fields
 - notification
