@@ -1,0 +1,284 @@
+<div class="content-wrapper">
+  <%- include('../partials/page_title'); %> <%- include('./create'); %> <%-
+  include('./update'); %>
+  <section class="content">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title mt-1"><b><%= title %> List</b></h3>
+        <div class="card-tools pr-2">
+          <a
+            data-toggle="modal"
+            data-target="#createProductModal"
+            href="#"
+            class="btn btn-primary btn-sm"
+          >
+            <i class="fas fa-plus"></i> Add New <%= singleTitle %>
+          </a>
+        </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table
+          id="productList"
+          class="table table-bordered table-sm table-striped"
+        >
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>SKU</th>
+              <th>Price</th>
+              <th>Unit</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% products.forEach(function(product) { %>
+            <tr>
+              <td><%= product.id %></td>
+              <td><%= product.name %></td>
+              <td><%= product.sku %></td>
+              <td><%= product.price %></td>
+              <td><%= product.unit %></td>
+              <td><%= product.type %></td>
+              <td>
+                <% var className = product.status === 'active' ? 'success' : 'danger'; %>
+                <a
+                  href="#"
+                  class="btn btn-<%= className %> btn-xs text-capitalize statusChange"
+                  data-status="<%= product.status %>"
+                  data-id="<%= product.id %>"
+                  ><%= product.status %></a
+                >
+              </td>
+              <td>
+                <a href="#" class="btn btn-info btn-xs">
+                  <i class="fas fa-info-circle"></i> View
+                </a>
+                <a
+                  class="btn updateProduct btn-primary btn-xs"
+                  data-id="<%= product.id %>"
+                >
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+                <a
+                  href="#"
+                  data-id="<%= product.id %>"
+                  class="deleteProduct btn btn-danger btn-xs"
+                >
+                  <i class="fas fa-trash"></i> Delete
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>SKU</th>
+              <th>Price</th>
+              <th>Unit</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  $(function () {
+    // datatable code
+    $("#productList")
+      .DataTable({
+        responsive: true,
+        lengthChange: false,
+        autoWidth: false,
+        order: false,
+        pageLength: 10,
+        lengthChange: true,
+      })
+      .buttons()
+      .container();
+
+    $(".statusChange").click(function () {
+      const productId = $(this).data("id");
+      const currentStatus = $(this).data("status");
+      const updateStatus = currentStatus == "active" ? "inactive" : "active";
+      Swal.fire({
+        title: "Are you sure?",
+        text: `Want to change status ${currentStatus} to ${updateStatus}`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, change it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // AJAX request to delete permission
+          $.ajax({
+            url: "<%= baseUrl %>product/status/" + productId,
+            type: "PATCH",
+            data: { status: updateStatus },
+            success: function (response, textStatus, xhr) {
+              if (xhr.status == 200) {
+                Swal.fire({
+                  title: "Status changed!",
+                  text: "<%= singleTitle %> has been updated successfully.",
+                  icon: "success",
+                  timer: 1500,
+                  showConfirmButton: false,
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  title: "Error!",
+                  text: response.message || "Failed to update product status.",
+                  icon: "error",
+                });
+              }
+            },
+            error: function (xhr) {
+              Swal.fire({
+                title: "Error!",
+                text:
+                  xhr.responseJSON?.message ||
+                  "An error occurred while updating the product.",
+                icon: "error",
+              });
+            },
+          });
+        }
+      });
+    });
+
+    // Delete functionality with SweetAlert
+    $(".deleteProduct").click(function () {
+      const productId = $(this).data("id");
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // AJAX request to delete permission
+          $.ajax({
+            url: "<%= baseUrl %>product/delete/" + productId,
+            type: "DELETE",
+            success: function (response, textStatus, xhr) {
+              if (xhr.status == 200) {
+                Swal.fire({
+                  title: "Deleted!",
+                  text: "<%= singleTitle %> has been deleted successfully.",
+                  icon: "success",
+                  timer: 1500,
+                  showConfirmButton: false,
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  title: "Error!",
+                  text: response.message || "Failed to delete item.",
+                  icon: "error",
+                });
+              }
+            },
+            error: function (xhr) {
+              Swal.fire({
+                title: "Error!",
+                text:
+                  xhr.responseJSON?.message ||
+                  "An error occurred while deleting the item.",
+                icon: "error",
+              });
+            },
+          });
+        }
+      });
+    });
+
+    // Update functionality with SweetAlert
+    $(".updateProduct").click(function () {
+      const productId = $(this).data("id");
+      $.ajax({
+        url: "<%= baseUrl %>product/read/" + productId,
+        type: "GET",
+        success: function (response) {
+          const data = response.data;
+          console.log(response);
+          $("#updateProductModal").modal("show");
+          $("#updateProductForm input[name=name]").val(data.name);
+          $("#updateProductForm input[name=sku]").val(data.sku);
+          $("#updateProductForm input[name=shortDescription]").val(data.shortDescription);
+          $("#updateProductForm input[name=price]").val(data.price);
+          $("#updateProductForm input[name=unit]").val(data.unit);
+          $("#updateProductForm input[name=type]").val(data.type);
+          $("#updateProductForm input[name=image]").val(data.image);
+          $(".productIdUpdate").text(data.id);
+
+          $("#updateProductForm").submit(function (event) {
+            event.preventDefault();
+
+            const formData = {
+              name: $("#updateProductForm input[name=name]").val(),
+              sku: $("#updateProductForm input[name=sku]").val(),
+              shortDescription: $("#updateProductForm input[name=shortDescription]").val(),
+              price: $("#updateProductForm input[name=price]").val(),
+              unit: $("#updateProductForm input[name=unit]").val(),
+              type: $("#updateProductForm input[name=type]").val(),
+              image: $("#updateProductForm input[name=image]").val(),
+            };
+
+            $.ajax({
+              url: "<%= baseUrl %>product/update/" + productId,
+              type: "PATCH",
+              data: JSON.stringify(formData),
+              contentType: "application/json",
+              success: function (response, textStatus, xhr) {
+                if (xhr.status == 200) {
+                  Swal.fire({
+                    title: "Success!",
+                    text: response.message,
+                    icon: "success",
+                    confirmButtonText: "OK",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      location.reload();
+                    }
+                  });
+                }
+              },
+              error: function (xhr) {
+                let errorMessage = "An error occurred while updating the product.";
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                  errorMessage = xhr.responseJSON.message;
+                }
+                Swal.fire({
+                  title: "Error!",
+                  text: errorMessage,
+                  icon: "error",
+                  confirmButtonText: "OK",
+                });
+              },
+            });
+          });
+        },
+        error: function (xhr) {
+          console.error(xhr);
+        },
+      });
+    });
+  });
+</script> 

@@ -12,6 +12,7 @@ const ContactController = require("../controllers/contact.controller");
 const ExpenseCategoryController = require("../controllers/expensecategory.controller");
 const ExpenseController = require("../controllers/expense.controller");
 const PaymentController = require("../controllers/payment.controller");
+const ProductController = require("../controllers/product.controller");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -99,5 +100,13 @@ router.patch("/payment/update/:id", PaymentController.updatePaymentAPI);
 router.get("/payment/read/:id", PaymentController.readPaymentAPI);
 router.delete("/payment/delete/:id", PaymentController.deletePaymentAPI);
 router.patch("/payment/status/:id", PaymentController.updatePaymentStatusAPI);
+
+// Product routes
+router.get("/product/list", ProductController.listProductView);
+router.post("/product/create", ProductController.createProductAPI);
+router.patch("/product/update/:id", ProductController.updateProductAPI);
+router.get("/product/read/:id", ProductController.readProductAPI);
+router.delete("/product/delete/:id", ProductController.deleteProductAPI);
+router.patch("/product/status/:id", ProductController.updateProductStatusAPI);
 
 module.exports = router;

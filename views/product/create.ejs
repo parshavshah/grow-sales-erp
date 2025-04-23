@@ -1,0 +1,112 @@
+<div class="modal fade" id="createProductModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><%= singleTitle %> Create</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="createProductForm">
+          
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control form-control-sm" name="name" />
+          </div>
+
+          <div class="form-group">
+            <label for="sku">SKU</label>
+            <input type="text" class="form-control form-control-sm" name="sku" />
+          </div>
+
+          <div class="form-group">
+            <label for="shortDescription">Short Description</label>
+            <input type="text" class="form-control form-control-sm" name="shortDescription" />
+          </div>
+
+          <div class="form-group">
+            <label for="price">Price</label>
+            <input type="number" class="form-control form-control-sm" name="price" />
+          </div>
+
+          <div class="form-group">
+            <label for="unit">Unit</label>
+            <input type="text" class="form-control form-control-sm" name="unit" />
+          </div>
+
+          <div class="form-group">
+            <label for="type">Type</label>
+            <input type="number" class="form-control form-control-sm" name="type" />
+          </div>
+
+          <div class="form-group">
+            <label for="image">Image URL</label>
+            <input type="text" class="form-control form-control-sm" name="image" />
+          </div>
+
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    const form = document.getElementById("createProductForm");
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const formData = {
+        name: $("input[name=name]").val(),
+        sku: $("input[name=sku]").val(),
+        shortDescription: $("input[name=shortDescription]").val(),
+        price: $("input[name=price]").val(),
+        unit: $("input[name=unit]").val(),
+        type: $("input[name=type]").val(),
+        image: $("input[name=image]").val(),
+      };
+
+      $.ajax({
+        url: "<%= baseUrl %>product/create",
+        type: "POST",
+        data: JSON.stringify(formData),
+        contentType: "application/json",
+        success: function (response, textStatus, xhr) {
+          console.log(response);
+          if (xhr.status == 201) {
+            Swal.fire({
+              title: "Success!",
+              text: response.message,
+              icon: "success",
+              confirmButtonText: "OK",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                location.reload();
+              }
+            });
+          }
+        },
+        error: function (xhr) {
+          let errorMessage = "An error occurred while creating the product.";
+          if (xhr.responseJSON && xhr.responseJSON.message) {
+            errorMessage = xhr.responseJSON.message;
+          }
+          Swal.fire({
+            title: "Error!",
+            text: errorMessage,
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        },
+      });
+    });
+  });
+</script> 

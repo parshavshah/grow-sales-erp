@@ -1,0 +1,61 @@
+<div class="modal fade" id="updateProductModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">
+          <%= singleTitle %> Update #
+          <span class="productIdUpdate">000</span>
+        </h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="updateProductForm">
+
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control form-control-sm" name="name" />
+          </div>
+
+          <div class="form-group">
+            <label for="sku">SKU</label>
+            <input type="text" class="form-control form-control-sm" name="sku" />
+          </div>
+
+          <div class="form-group">
+            <label for="shortDescription">Short Description</label>
+            <input type="text" class="form-control form-control-sm" name="shortDescription" />
+          </div>
+
+          <div class="form-group">
+            <label for="price">Price</label>
+            <input type="number" class="form-control form-control-sm" name="price" />
+          </div>
+
+          <div class="form-group">
+            <label for="unit">Unit</label>
+            <input type="text" class="form-control form-control-sm" name="unit" />
+          </div>
+
+          <div class="form-group">
+            <label for="type">Type</label>
+            <input type="number" class="form-control form-control-sm" name="type" />
+          </div>
+
+          <div class="form-group">
+            <label for="image">Image URL</label>
+            <input type="text" class="form-control form-control-sm" name="image" />
+          </div>
+          
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div> 
