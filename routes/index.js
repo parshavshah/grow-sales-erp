@@ -15,7 +15,6 @@ router.post("/base/create", BaseController.createRecordAPI);
 router.patch("/base/update/:id", BaseController.updateRecordAPI);
 router.get("/base/read/:id", BaseController.readRecordAPI);
 router.delete("/base/delete/:id", BaseController.deleteRecordAPI);
-// router.patch("/base/status/:id", BaseController.updateRecordStatusAPI);
 
 router.get("/employee/list", EmployeeController.listEmployeeView);
 router.post("/employee/create", EmployeeController.createEmployeeAPI);
@@ -29,6 +28,5 @@ router.post("/tax/create", TaxController.createTaxAPI);
 router.patch("/tax/update/:id", TaxController.updateTaxAPI);
 router.get("/tax/read/:id", TaxController.readTaxAPI);
 router.delete("/tax/delete/:id", TaxController.deleteTaxAPI);
-router.patch("/tax/status/:id", TaxController.updateTaxStatusAPI);
 
 module.exports = router;

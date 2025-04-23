@@ -29,7 +29,10 @@
 
           <div class="form-group">
             <label for="type">Type</label>
-            <input type="text" class="form-control form-control-sm" name="type" />
+            <select class="form-control form-control-sm" name="type" required>
+              <option value="fixed">Fixed</option>
+              <option value="percentage" selected>Percentage</option>
+            </select>
           </div>
           
           <button type="submit" class="btn btn-primary">Submit</button>
