@@ -1,15 +1,18 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Lead extends Model {
+  class Contact extends Model {
     static associate(models) {}
   }
-  Lead.init(
+  Contact.init(
     {
+      accountId: DataTypes.INTEGER,
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
       email: DataTypes.STRING,
       phone: DataTypes.STRING,
+      department: DataTypes.STRING,
+      assignedTo: DataTypes.INTEGER,
       company: DataTypes.STRING,
       jobTitle: DataTypes.STRING,
       leadSource: DataTypes.STRING,
@@ -27,11 +30,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Lead",
+      modelName: "Contact",
       paranoid: true,
-      tableName: "leads",
+      tableName: "contacts",
       timestamps: true,
     }
   ).sync({ alter: true });
-  return Lead;
+  return Contact;
 };

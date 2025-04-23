@@ -6,16 +6,17 @@ module.exports = (sequelize, DataTypes) => {
   }
   Expense.init(
     {
-      expense_number: DataTypes.STRING,
-      expense_date: DataTypes.DATE,
-      amount: DataTypes.INTEGER,
-      tax_amount: DataTypes.INTEGER,
-      total_amount: DataTypes.INTEGER,
+      expenseNumber: DataTypes.STRING,
+      expenseDate: DataTypes.DATE,
+      amount: DataTypes.FLOAT,
+      taxAmount: DataTypes.FLOAT,
+      categoryId: DataTypes.INTEGER,
+      totalAmount: DataTypes.INTEGER,
       vendor: DataTypes.STRING,
       description: DataTypes.STRING,
-      payment_method: DataTypes.STRING,
+      paymentMethodId: DataTypes.STRING,
       reference: DataTypes.STRING,
-      receipt_image: DataTypes.STRING,
+      receiptImage: DataTypes.STRING,
       createdBy: DataTypes.STRING,
     },
     {

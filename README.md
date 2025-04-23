@@ -392,7 +392,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 
 ## Finance Module
 
-### `paymentmethods`
+### `paymentmethods` - DONE
 
 | Column      | Type         | Constraints                | Description                             |
 | ----------- | ------------ | -------------------------- | --------------------------------------- |
@@ -401,7 +401,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | description | TEXT         |                            | Description                             |
 | status      | BOOLEAN      | DEFAULT TRUE               | Whether method is active                |
 
-### `payments`
+### `payments` - DONE
 
 | Column          | Type          | Constraints                               | Description                            |
 | --------------- | ------------- | ----------------------------------------- | -------------------------------------- |
@@ -414,11 +414,12 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | reference       | VARCHAR(255)  |                                           | External reference number              |
 | notes           | TEXT          |                                           | Additional notes                       |
 | entityType      | VARCHAR(255)  | NOT NULL                                  | Related entity type (invoice, expense) |
+| paymentImage      | VARCHAR(255)  | NOT NULL                                  | Related entity type (invoice, expense) |
 | entityId        | INT           | NOT NULL                                  | ID of the related entity               |
 | accountId       | INT           | FOREIGN KEY (accounts.id)                 | Related account/customer               |
 | createdBy       | INT           | FOREIGN KEY (users.id), NOT NULL          | User who recorded this payment         |
 
-### `expensecategories`
+### `expensecategories` - DONE
 
 | Column      | Type         | Constraints                | Description                |
 | ----------- | ------------ | -------------------------- | -------------------------- |
@@ -427,7 +428,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | description | TEXT         |                            | Description                |
 | status      | BOOLEAN      | DEFAULT TRUE               | Whether category is active |
 
-### `expenses`
+### `expenses` - DONE
 
 | Column             | Type          | Constraints                                  | Description                    |
 | ------------------ | ------------- | -------------------------------------------- | ------------------------------ |
@@ -442,8 +443,6 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | description        | TEXT          |                                              | Description                    |
 | paymentMethodId    | INT           | FOREIGN KEY (paymentMethods.id)              | Payment method                 |
 | reference          | VARCHAR(255)  |                                              | Receipt/reference number       |
-| isRecurring        | BOOLEAN       | DEFAULT FALSE                                | Whether expense is recurring   |
-| recurringFrequency | VARCHAR(255)  |                                              | Frequency if recurring         |
 | receiptImage       | VARCHAR(255)  |                                              | Path to receipt image          |
 | createdBy          | INT           | FOREIGN KEY (users.id), NOT NULL             | User who recorded this expense |
 

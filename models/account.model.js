@@ -1,19 +1,16 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Lead extends Model {
+  class Accounts extends Model {
     static associate(models) {}
   }
-  Lead.init(
+  Accounts.init(
     {
-      firstName: DataTypes.STRING,
-      lastName: DataTypes.STRING,
-      email: DataTypes.STRING,
-      phone: DataTypes.STRING,
-      company: DataTypes.STRING,
-      jobTitle: DataTypes.STRING,
-      leadSource: DataTypes.STRING,
+      name: DataTypes.STRING,
+      accountType: DataTypes.STRING,
+      website: DataTypes.STRING,
       industry: DataTypes.STRING,
+      phone: DataTypes.STRING,
       address: DataTypes.STRING,
       city: DataTypes.STRING,
       state: DataTypes.STRING,
@@ -21,17 +18,15 @@ module.exports = (sequelize, DataTypes) => {
       country: DataTypes.STRING,
       description: DataTypes.STRING,
       assignedTo: DataTypes.INTEGER,
-      lastActivity: DataTypes.DATE,
-      leadStatus: DataTypes.STRING,
       createdBy: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: "Lead",
+      modelName: "Accounts",
       paranoid: true,
-      tableName: "leads",
+      tableName: "accounts",
       timestamps: true,
     }
   ).sync({ alter: true });
-  return Lead;
+  return Accounts;
 };

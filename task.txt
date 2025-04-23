@@ -36,3 +36,8 @@
 - timeEntry
 - custom_fields
 - notification
+
+- after creation model create the migrations
+
+- after creating migrations create seeders
+
