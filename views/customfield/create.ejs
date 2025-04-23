@@ -1,0 +1,183 @@
+<%- include('../partials/header') %>
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Create <%= singleTitle %></h1>
+        </div>
+        <!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="/customfield/list"><%= title %></a></li>
+            <li class="breadcrumb-item active">Create <%= singleTitle %></li>
+          </ol>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Create <%= singleTitle %></h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <form id="createCustomFieldForm">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="entityType">Entity Type</label>
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        name="entityType"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="fieldName">Field Name</label>
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        name="fieldName"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="fieldLabel">Field Label</label>
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        name="fieldLabel"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="fieldType">Field Type</label>
+                      <select class="form-control form-control-sm" name="fieldType" required>
+                        <option value="text">Text</option>
+                        <option value="number">Number</option>
+                        <option value="date">Date</option>
+                        <option value="select">Select</option>
+                        <option value="checkbox">Checkbox</option>
+                        <option value="radio">Radio</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="fieldOptions">Field Options (comma separated for select/radio)</label>
+                      <textarea
+                        class="form-control form-control-sm"
+                        name="fieldOptions"
+                        rows="3"
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <div class="custom-control custom-checkbox">
+                        <input
+                          type="checkbox"
+                          class="custom-control-input"
+                          id="isRequired"
+                          name="isRequired"
+                        />
+                        <label class="custom-control-label" for="isRequired">Required</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="fieldOrder">Field Order</label>
+                      <input
+                        type="number"
+                        class="form-control form-control-sm"
+                        name="fieldOrder"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <a href="/customfield/list" class="btn btn-secondary">Cancel</a>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+<%- include('../partials/footer') %>
+
+<script>
+  $(document).ready(function () {
+    $("#createCustomFieldForm").submit(function (event) {
+      event.preventDefault();
+      const formData = $(this).serialize();
+      $.ajax({
+        url: "<%= baseUrl %>customfield/create",
+        type: "POST",
+        data: formData,
+        success: function (response) {
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: response.message,
+          }).then(() => {
+            window.location.href = "/customfield/list";
+          });
+        },
+        error: function (xhr) {
+          Swal.fire({
+            icon: "error",
+            title: "Error!",
+            text: xhr.responseJSON?.message || "Failed to create custom field",
+          });
+        },
+      });
+    });
+  });
+</script> 

@@ -1,0 +1,488 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0"><%= title %></h1>
+        </div>
+        <!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active"><%= title %></li>
+          </ol>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title mt-1">
+                <b><%= title %></b>
+              </h3>
+              <div class="card-tools">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm"
+                  data-toggle="modal"
+                  data-target="#createCustomFieldModal"
+                >
+                  <i class="fas fa-plus"></i> Add <%= singleTitle %>
+                </button>
+              </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table
+                id="customFieldsTable"
+                class="table table-sm table-bordered table-striped"
+              >
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Entity Type</th>
+                    <th>Field Name</th>
+                    <th>Field Label</th>
+                    <th>Field Type</th>
+                    <th>Required</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% customFields.forEach(function(customField) { %>
+                  <tr>
+                    <td><%= customField.id %></td>
+                    <td><%= customField.entityType %></td>
+                    <td><%= customField.fieldName %></td>
+                    <td><%= customField.fieldLabel %></td>
+                    <td><%= customField.fieldType %></td>
+                    <td>
+                      <span
+                        class="badge badge-<%= customField.isRequired ? 'success' : 'warning' %>"
+                      >
+                        <%= customField.isRequired ? 'Yes' : 'No' %>
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        class="badge badge-<%= customField.status === 'active' ? 'success' : 'danger' %>"
+                      >
+                        <%= customField.status %>
+                      </span>
+                    </td>
+                    <td>
+                      <a href="#" class="btn btn-info btn-xs">
+                        <i class="fas fa-info-circle"></i> View
+                      </a>
+                      <a
+                        class="btn updateCustomField btn-primary btn-xs"
+                        data-id="<%= customField.id %>"
+                      >
+                        <i class="fas fa-edit"></i> Edit
+                      </a>
+                      <a
+                        href="#"
+                        data-id="<%= customField.id %>"
+                        class="deleteCustomField btn btn-danger btn-xs"
+                      >
+                        <i class="fas fa-trash"></i> Delete
+                      </a>
+                    </td>
+                  </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+<!-- Create Custom Field Modal -->
+<div
+  class="modal fade"
+  id="createCustomFieldModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="createCustomFieldModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createCustomFieldModalLabel">
+          Create <%= singleTitle %>
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="createCustomFieldForm">
+          <div class="form-group">
+            <label for="entityType">Entity Type</label>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              name="entityType"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="fieldName">Field Name</label>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              name="fieldName"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="fieldLabel">Field Label</label>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              name="fieldLabel"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="fieldType">Field Type</label>
+            <select
+              class="form-control form-control-sm"
+              name="fieldType"
+              required
+            >
+              <option value="text">Text</option>
+              <option value="number">Number</option>
+              <option value="date">Date</option>
+              <option value="select">Select</option>
+              <option value="checkbox">Checkbox</option>
+              <option value="radio">Radio</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fieldOptions"
+              >Field Options (comma separated for select/radio)</label
+            >
+            <textarea
+              class="form-control form-control-sm"
+              name="fieldOptions"
+              rows="3"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <div class="custom-control custom-checkbox">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="isRequired"
+                name="isRequired"
+              />
+              <label class="custom-control-label" for="isRequired"
+                >Required</label
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="fieldOrder">Field Order</label>
+            <input
+              type="number"
+              class="form-control form-control-sm"
+              name="fieldOrder"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary" id="createCustomFieldBtn">
+          Create
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update Custom Field Modal -->
+<div
+  class="modal fade"
+  id="updateCustomFieldModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="updateCustomFieldModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateCustomFieldModalLabel">
+          Update <%= singleTitle %>
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="updateCustomFieldForm">
+          <div class="form-group">
+            <label for="entityType">Entity Type</label>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              name="entityType"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="fieldName">Field Name</label>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              name="fieldName"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="fieldLabel">Field Label</label>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              name="fieldLabel"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="fieldType">Field Type</label>
+            <select
+              class="form-control form-control-sm"
+              name="fieldType"
+              required
+            >
+              <option value="text">Text</option>
+              <option value="number">Number</option>
+              <option value="date">Date</option>
+              <option value="select">Select</option>
+              <option value="checkbox">Checkbox</option>
+              <option value="radio">Radio</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fieldOptions"
+              >Field Options (comma separated for select/radio)</label
+            >
+            <textarea
+              class="form-control form-control-sm"
+              name="fieldOptions"
+              rows="3"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <div class="custom-control custom-checkbox">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="isRequiredUpdate"
+                name="isRequired"
+              />
+              <label class="custom-control-label" for="isRequiredUpdate"
+                >Required</label
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="fieldOrder">Field Order</label>
+            <input
+              type="number"
+              class="form-control form-control-sm"
+              name="fieldOrder"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary" id="updateCustomFieldBtn">
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    // Initialize DataTable
+    $("#customFieldsTable").DataTable({
+      responsive: true,
+      autoWidth: false,
+    });
+
+    // Create functionality
+    $("#createCustomFieldBtn").click(function () {
+      const formData = $("#createCustomFieldForm").serialize();
+      $.ajax({
+        url: "<%= baseUrl %>customfield/create",
+        type: "POST",
+        data: formData,
+        success: function (response) {
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: response.message,
+          }).then(() => {
+            location.reload();
+          });
+        },
+        error: function (xhr) {
+          Swal.fire({
+            icon: "error",
+            title: "Error!",
+            text: xhr.responseJSON?.message || "Failed to create custom field",
+          });
+        },
+      });
+    });
+
+    // Update functionality
+    $(".updateCustomField").click(function () {
+      const customFieldId = $(this).data("id");
+      $.ajax({
+        url: "<%= baseUrl %>customfield/read/" + customFieldId,
+        type: "GET",
+        success: function (response) {
+          const data = response.data;
+          $("#updateCustomFieldModal").modal("show");
+          $("#updateCustomFieldForm input[name=entityType]").val(
+            data.entityType
+          );
+          $("#updateCustomFieldForm input[name=fieldName]").val(data.fieldName);
+          $("#updateCustomFieldForm input[name=fieldLabel]").val(
+            data.fieldLabel
+          );
+          $("#updateCustomFieldForm select[name=fieldType]").val(
+            data.fieldType
+          );
+          $("#updateCustomFieldForm textarea[name=fieldOptions]").val(
+            data.fieldOptions
+          );
+          $("#updateCustomFieldForm input[name=isRequired]").prop(
+            "checked",
+            data.isRequired
+          );
+          $("#updateCustomFieldForm input[name=fieldOrder]").val(
+            data.fieldOrder
+          );
+          $("#updateCustomFieldForm").data("id", customFieldId);
+        },
+        error: function (xhr) {
+          Swal.fire({
+            icon: "error",
+            title: "Error!",
+            text: xhr.responseJSON?.message || "Failed to fetch custom field",
+          });
+        },
+      });
+    });
+
+    $("#updateCustomFieldBtn").click(function () {
+      const customFieldId = $("#updateCustomFieldForm").data("id");
+      const formData = $("#updateCustomFieldForm").serialize();
+      $.ajax({
+        url: "<%= baseUrl %>customfield/update/" + customFieldId,
+        type: "PATCH",
+        data: formData,
+        success: function (response) {
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: response.message,
+          }).then(() => {
+            location.reload();
+          });
+        },
+        error: function (xhr) {
+          Swal.fire({
+            icon: "error",
+            title: "Error!",
+            text: xhr.responseJSON?.message || "Failed to update custom field",
+          });
+        },
+      });
+    });
+
+    // Delete functionality
+    $(".deleteCustomField").click(function () {
+      const customFieldId = $(this).data("id");
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: "<%= baseUrl %>customfield/delete/" + customFieldId,
+            type: "DELETE",
+            success: function (response) {
+              Swal.fire({
+                icon: "success",
+                title: "Success!",
+                text: response.message,
+              }).then(() => {
+                location.reload();
+              });
+            },
+            error: function (xhr) {
+              Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text:
+                  xhr.responseJSON?.message || "Failed to delete custom field",
+              });
+            },
+          });
+        }
+      });
+    });
+  });
+</script>

@@ -7,6 +7,7 @@ const TaxController = require("../controllers/tax.controller");
 const PaymentMethodController = require("../controllers/paymentmethod.controller");
 const LeadController = require("../controllers/lead.controller");
 const AccountController = require("../controllers/account.controller");
+const CustomFieldController = require("../controllers/customfield.controller");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -54,5 +55,13 @@ router.patch("/account/update/:id", AccountController.updateAccountAPI);
 router.get("/account/read/:id", AccountController.readAccountAPI);
 router.delete("/account/delete/:id", AccountController.deleteAccountAPI);
 router.patch("/account/status/:id", AccountController.updateAccountStatusAPI);
+
+// Custom Field routes
+router.get("/customfield/list", CustomFieldController.listCustomFieldView);
+router.post("/customfield/create", CustomFieldController.createCustomFieldAPI);
+router.patch("/customfield/update/:id", CustomFieldController.updateCustomFieldAPI);
+router.delete("/customfield/delete/:id", CustomFieldController.deleteCustomFieldAPI);
+router.get("/customfield/read/:id", CustomFieldController.readCustomFieldAPI);
+router.patch("/customfield/status/:id", CustomFieldController.updateCustomFieldStatusAPI);
 
 module.exports = router;
