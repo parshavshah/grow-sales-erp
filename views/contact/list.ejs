@@ -1,0 +1,306 @@
+<div class="content-wrapper">
+  <%- include('../partials/page_title'); %> <%- include('./create'); %> <%- include('./update'); %>
+  <section class="content">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title mt-1"><b><%= title %> List</b></h3>
+        <div class="card-tools pr-2">
+          <a
+            data-toggle="modal"
+            data-target="#createContactModal"
+            href="#"
+            class="btn btn-primary btn-sm"
+          >
+            <i class="fas fa-plus"></i> Add New <%= singleTitle %>
+          </a>
+        </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table
+          id="contactList"
+          class="table table-bordered table-sm table-striped"
+        >
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Company</th>
+              <th>Department</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% contacts.forEach(function(contact) { %>
+            <tr>
+              <td><%= contact.id %></td>
+              <td><%= contact.firstName %> <%= contact.lastName %></td>
+              <td><%= contact.email %></td>
+              <td><%= contact.phone %></td>
+              <td><%= contact.company %></td>
+              <td><%= contact.department %></td>
+              <td>
+                <a
+                  href="#"
+                  class="btn btn-info btn-xs text-capitalize statusChange"
+                  data-status="<%= contact.status %>"
+                  data-id="<%= contact.id %>"
+                  ><%= contact.status %></a
+                >
+              </td>
+              <td>
+                <a href="#" class="btn btn-info btn-xs">
+                  <i class="fas fa-info-circle"></i> View
+                </a>
+                <a
+                  class="btn updateContact btn-primary btn-xs"
+                  data-id="<%= contact.id %>"
+                >
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+                <a
+                  href="#"
+                  data-id="<%= contact.id %>"
+                  class="deleteContact btn btn-danger btn-xs"
+                >
+                  <i class="fas fa-trash"></i> Delete
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Company</th>
+              <th>Department</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  $(function () {
+    // datatable code
+    $("#contactList")
+      .DataTable({
+        responsive: true,
+        lengthChange: false,
+        autoWidth: false,
+        order: false,
+        pageLength: 10,
+        lengthChange: true,
+      })
+      .buttons()
+      .container();
+
+    $(".statusChange").click(function () {
+      const contactId = $(this).data("id");
+      const currentStatus = $(this).data("status");
+      const updateStatus = currentStatus == "active" ? "inactive" : "active";
+      Swal.fire({
+        title: "Are you sure?",
+        text: `Want to change status ${currentStatus} to ${updateStatus}`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, change it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // AJAX request to delete permission
+          $.ajax({
+            url: "<%= baseUrl %>contact/status/" + contactId,
+            type: "PATCH",
+            data: { status: updateStatus },
+            success: function (response, textStatus, xhr) {
+              if (xhr.status == 200) {
+                Swal.fire({
+                  title: "Status changed!",
+                  text: "<%= singleTitle %> has been updated successfully.",
+                  icon: "success",
+                  timer: 1500,
+                  showConfirmButton: false,
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  title: "Error!",
+                  text: response.message || "Failed to update contact status.",
+                  icon: "error",
+                });
+              }
+            },
+            error: function (xhr) {
+              Swal.fire({
+                title: "Error!",
+                text:
+                  xhr.responseJSON?.message ||
+                  "An error occurred while updating the contact.",
+                icon: "error",
+              });
+            },
+          });
+        }
+      });
+    });
+
+    // Delete functionality with SweetAlert
+    $(".deleteContact").click(function () {
+      const contactId = $(this).data("id");
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // AJAX request to delete permission
+          $.ajax({
+            url: "<%= baseUrl %>contact/delete/" + contactId,
+            type: "DELETE",
+            success: function (response, textStatus, xhr) {
+              if (xhr.status == 200) {
+                Swal.fire({
+                  title: "Deleted!",
+                  text: "<%= singleTitle %> has been deleted successfully.",
+                  icon: "success",
+                  timer: 1500,
+                  showConfirmButton: false,
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  title: "Error!",
+                  text: response.message || "Failed to delete item.",
+                  icon: "error",
+                });
+              }
+            },
+            error: function (xhr) {
+              Swal.fire({
+                title: "Error!",
+                text:
+                  xhr.responseJSON?.message ||
+                  "An error occurred while deleting the item.",
+                icon: "error",
+              });
+            },
+          });
+        }
+      });
+    });
+
+    // Update functionality with SweetAlert
+    $(".updateContact").click(function () {
+      const contactId = $(this).data("id");
+      $.ajax({
+        url: "<%= baseUrl %>contact/read/" + contactId,
+        type: "GET",
+        success: function (response) {
+          const data = response.data;
+          console.log(response);
+          $("#updateContactModal").modal("show");
+          $("#updateContactForm input[name=firstName]").val(data.firstName);
+          $("#updateContactForm input[name=lastName]").val(data.lastName);
+          $("#updateContactForm input[name=email]").val(data.email);
+          $("#updateContactForm input[name=phone]").val(data.phone);
+          $("#updateContactForm input[name=company]").val(data.company);
+          $("#updateContactForm input[name=jobTitle]").val(data.jobTitle);
+          $("#updateContactForm input[name=department]").val(data.department);
+          $("#updateContactForm input[name=leadSource]").val(data.leadSource);
+          $("#updateContactForm input[name=industry]").val(data.industry);
+          $("#updateContactForm input[name=address]").val(data.address);
+          $("#updateContactForm input[name=city]").val(data.city);
+          $("#updateContactForm input[name=state]").val(data.state);
+          $("#updateContactForm input[name=zip]").val(data.zip);
+          $("#updateContactForm input[name=country]").val(data.country);
+          $("#updateContactForm textarea[name=description]").val(data.description);
+          $(".contactIdUpdate").text(data.id);
+
+          $("#updateContactForm").submit(function (event) {
+            event.preventDefault();
+
+            const formData = {
+              firstName: $("#updateContactForm input[name=firstName]").val(),
+              lastName: $("#updateContactForm input[name=lastName]").val(),
+              email: $("#updateContactForm input[name=email]").val(),
+              phone: $("#updateContactForm input[name=phone]").val(),
+              company: $("#updateContactForm input[name=company]").val(),
+              jobTitle: $("#updateContactForm input[name=jobTitle]").val(),
+              department: $("#updateContactForm input[name=department]").val(),
+              leadSource: $("#updateContactForm input[name=leadSource]").val(),
+              industry: $("#updateContactForm input[name=industry]").val(),
+              address: $("#updateContactForm input[name=address]").val(),
+              city: $("#updateContactForm input[name=city]").val(),
+              state: $("#updateContactForm input[name=state]").val(),
+              zip: $("#updateContactForm input[name=zip]").val(),
+              country: $("#updateContactForm input[name=country]").val(),
+              description: $("#updateContactForm textarea[name=description]").val(),
+            };
+
+            $.ajax({
+              url: "<%= baseUrl %>contact/update/" + contactId,
+              type: "PATCH",
+              data: formData,
+              success: function (response, textStatus, xhr) {
+                if (xhr.status == 200) {
+                  Swal.fire({
+                    title: "Updated!",
+                    text: "<%= singleTitle %> has been updated successfully.",
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false,
+                  }).then(() => {
+                    location.reload();
+                  });
+                } else {
+                  Swal.fire({
+                    title: "Error!",
+                    text: response.message || "Failed to update item.",
+                    icon: "error",
+                  });
+                }
+              },
+              error: function (xhr) {
+                Swal.fire({
+                  title: "Error!",
+                  text:
+                    xhr.responseJSON?.message ||
+                    "An error occurred while updating the item.",
+                  icon: "error",
+                });
+              },
+            });
+          });
+        },
+        error: function (xhr) {
+          Swal.fire({
+            title: "Error!",
+            text:
+              xhr.responseJSON?.message ||
+              "An error occurred while fetching the contact.",
+            icon: "error",
+          });
+        },
+      });
+    });
+  });
+</script> 
+

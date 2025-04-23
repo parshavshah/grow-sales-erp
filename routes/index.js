@@ -8,6 +8,7 @@ const PaymentMethodController = require("../controllers/paymentmethod.controller
 const LeadController = require("../controllers/lead.controller");
 const AccountController = require("../controllers/account.controller");
 const CustomFieldController = require("../controllers/customfield.controller");
+const ContactController = require("../controllers/contact.controller");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -63,5 +64,13 @@ router.patch("/customfield/update/:id", CustomFieldController.updateCustomFieldA
 router.delete("/customfield/delete/:id", CustomFieldController.deleteCustomFieldAPI);
 router.get("/customfield/read/:id", CustomFieldController.readCustomFieldAPI);
 router.patch("/customfield/status/:id", CustomFieldController.updateCustomFieldStatusAPI);
+
+// Contact routes
+router.get("/contact/list", ContactController.listContactView);
+router.post("/contact/create", ContactController.createContactAPI);
+router.patch("/contact/update/:id", ContactController.updateContactAPI);
+router.get("/contact/read/:id", ContactController.readContactAPI);
+router.delete("/contact/delete/:id", ContactController.deleteContactAPI);
+router.patch("/contact/status/:id", ContactController.updateContactStatusAPI);
 
 module.exports = router;
