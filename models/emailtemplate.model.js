@@ -6,7 +6,6 @@ module.exports = (sequelize, DataTypes) => {
   }
   EmailTemplate.init(
     {
-      id: DataTypes.STRING,
       name: DataTypes.STRING,
       subject: DataTypes.STRING,
       body: DataTypes.TEXT,
