@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
   PaymentMethod.init(
     {
       name: DataTypes.STRING,
-      description: DataTypes.TEXT,
+      description: DataTypes.STRING,
       status: DataTypes.STRING,
     },
     {
