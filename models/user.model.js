@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
   User.init(
     {
       email: DataTypes.STRING,
+      username: DataTypes.STRING,
       passwordHash: DataTypes.STRING,
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
@@ -14,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
       profileImage: DataTypes.STRING,
       lastLogin: DataTypes.DATE,
       status: DataTypes.STRING,
-      role: DataTypes.STRING,
     },
     {
       sequelize,
