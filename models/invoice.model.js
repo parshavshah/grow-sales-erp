@@ -1,24 +1,23 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Quotation extends Model {
+  class Invoice extends Model {
     static associate(models) {}
   }
-  Quotation.init(
+  Invoice.init(
     {
-      quotationNumber: DataTypes.STRING,
+      invoiceNumber: DataTypes.STRING,
       accountId: DataTypes.INTEGER,
       contactId: DataTypes.INTEGER,
-      quoteDate: DataTypes.DATE,
-      expiryDate: DataTypes.DATE,
+      invoiceDate: DataTypes.STRING,
+      dueDate: DataTypes.STRING,
       status: DataTypes.STRING,
-      currency: DataTypes.STRING,
-      taxInclusive: DataTypes.STRING,
-      subtotal: DataTypes.STRING,
       taxAmount: DataTypes.FLOAT,
       discountType: DataTypes.STRING,
       discountValue: DataTypes.FLOAT,
       totalAmount: DataTypes.FLOAT,
+      amountPaid: DataTypes.FLOAT,
+      amountDue: DataTypes.FLOAT,
       notes: DataTypes.STRING,
       terms: DataTypes.TEXT,
       assignedTo: DataTypes.INTEGER,
@@ -26,11 +25,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Quotation",
+      modelName: "Invoice",
       paranoid: true,
-      tableName: "quotations",
+      tableName: "invoices",
       timestamps: true,
     }
   ).sync({ alter: true });
-  return Quotation;
+  return Invoice;
 };

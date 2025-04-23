@@ -57,7 +57,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 
 ## Core Tables
 
-### `users`
+### `users` - DONE
 
 | Column       | Type         | Constraints                | Description                    |
 | ------------ | ------------ | -------------------------- | ------------------------------ |
@@ -72,7 +72,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | status       | BOOLEAN      | DEFAULT TRUE               | Whether user account is active |
 | lastLogin    | TIMESTAMP    |                            | Last login timestamp           |
 
-### `roles`
+### `roles` - DONE
 
 | Column      | Type         | Constraints                | Description                      |
 | ----------- | ------------ | -------------------------- | -------------------------------- |
@@ -80,7 +80,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | name        | VARCHAR(255) | UNIQUE, NOT NULL           | Role name (Admin, Manager, etc.) |
 | description | TEXT         |                            | Role description                 |
 
-### `userroles`
+### `userroles` - DONE
 
 | Column | Type | Constraints                      | Description               |
 | ------ | ---- | -------------------------------- | ------------------------- |
@@ -88,7 +88,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | userId | INT  | FOREIGN KEY (users.id), NOT NULL | References user           |
 | roleId | INT  | FOREIGN KEY (roles.id), NOT NULL | References role           |
 
-### `permissions`
+### `permissions` - DONE
 
 | Column      | Type         | Constraints                | Description                             |
 | ----------- | ------------ | -------------------------- | --------------------------------------- |
@@ -98,7 +98,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | module      | VARCHAR(255) | NOT NULL                   | Related module (e.g., 'sales', 'crm')   |
 | description | TEXT         |                            | Permission description                  |
 
-### `rolepermissions`
+### `rolepermissions` - DONE
 
 | Column       | Type | Constraints                            | Description               |
 | ------------ | ---- | -------------------------------------- | ------------------------- |
@@ -106,7 +106,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | roleId       | INT  | FOREIGN KEY (roles.id), NOT NULL       | References role           |
 | permissionId | INT  | FOREIGN KEY (permissions.id), NOT NULL | References permission     |
 
-### `systemsettings`
+### `systemsettings` - DONE
 
 | Column       | Type         | Constraints                | Description                                      |
 | ------------ | ------------ | -------------------------- | ------------------------------------------------ |
@@ -116,7 +116,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | settingGroup | VARCHAR(255) | NOT NULL                   | Group for organization (e.g., 'general', 'mail') |
 | description  | TEXT         |                            | Description of the setting                       |
 
-### `customfields`
+### `customfields` - DONE
 
 | Column       | Type         | Constraints                | Description                                              |
 | ------------ | ------------ | -------------------------- | -------------------------------------------------------- |
@@ -130,7 +130,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | fieldOrder   | INT          | DEFAULT 0                  | Display order                                            |
 | status       | BOOLEAN      | DEFAULT TRUE               | Whether field is active                                  |
 
-### `customfieldvalues`
+### `customfieldvalues` - DONE
 
 | Column        | Type | Constraints                             | Description                                         |
 | ------------- | ---- | --------------------------------------- | --------------------------------------------------- |
@@ -141,7 +141,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 
 ## CRM Module
 
-### `leads`
+### `leads` - DONE
 
 | Column       | Type         | Constraints                      | Description                              |
 | ------------ | ------------ | -------------------------------- | ---------------------------------------- |
@@ -151,8 +151,8 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | email        | VARCHAR(255) |                                  | Lead's email                             |
 | phone        | VARCHAR(255) |                                  | Lead's phone number                      |
 | company      | VARCHAR(255) |                                  | Company name                             |
-| job_title    | VARCHAR(255) |                                  | Lead's job title                         |
-| lead_source  | VARCHAR(255) |                                  | Source of the lead                       |
+| jobTitle     | VARCHAR(255) |                                  | Lead's job title                         |
+| leadSource   | VARCHAR(255) |                                  | Source of the lead                       |
 | leadStatus   | VARCHAR(255) | NOT NULL                         | Status (New, Contacted, Qualified, etc.) |
 | industry     | VARCHAR(255) |                                  | Industry sector                          |
 | address      | TEXT         |                                  | Address                                  |
@@ -165,7 +165,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | createdBy    | INT          | FOREIGN KEY (users.id), NOT NULL | User who created this lead               |
 | lastActivity | TIMESTAMP    |                                  | Last activity date                       |
 
-### `contacts`
+### `contacts` - DONE
 
 | Column     | Type         | Constraints                      | Description                       |
 | ---------- | ------------ | -------------------------------- | --------------------------------- |
@@ -186,7 +186,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | assignedTo | INT          | FOREIGN KEY (users.id)           | User responsible for this contact |
 | createdBy  | INT          | FOREIGN KEY (users.id), NOT NULL | User who created this contact     |
 
-### `accounts`
+### `accounts` - DONE
 
 | Column      | Type         | Constraints                      | Description                       |
 | ----------- | ------------ | -------------------------------- | --------------------------------- |
@@ -205,7 +205,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | assignedTo  | INT          | FOREIGN KEY (users.id)           | User responsible for this account |
 | createdBy   | INT          | FOREIGN KEY (users.id), NOT NULL | User who created this account     |
 
-### `followups`
+### `followups` - DONE
 
 | Column       | Type         | Constraints                      | Description                            |
 | ------------ | ------------ | -------------------------------- | -------------------------------------- |
@@ -223,7 +223,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | completedAt  | TIMESTAMP    |                                  | When follow-up was completed           |
 | isResolved   | BOOLEAN      |                                  | is followup completed or not           |
 
-### `notes`
+### `notes` - DONE
 
 | Column      | Type         | Constraints                      | Description                                |
 | ----------- | ------------ | -------------------------------- | ------------------------------------------ |
@@ -236,7 +236,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 
 ## Sales Module
 
-### `taxes`
+### `taxes` - DONE
 
 | Column | Type         | Constraints                         | Description                                   |
 | ------ | ------------ | ----------------------------------- | --------------------------------------------- |
@@ -245,7 +245,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | value  | FLOAT        |                                     | Category description                          |
 | type   | VARCHAR(255) | FOREIGN KEY (product_categories.id) | Parent category ID for hierarchical structure |
 
-### `products`
+### `products` - DONE
 
 | Column      | Type          | Constraints                      | Description                   |
 | ----------- | ------------- | -------------------------------- | ----------------------------- |
@@ -261,7 +261,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | image       | VARCHAR(255)  |                                  | Path to product image         |
 | createdBy   | INT           | FOREIGN KEY (users.id), NOT NULL | User who created this product |
 
-### `producttaxes`
+### `producttaxes` - DONE
 
 | Column    | Type | Constraints                | Description                |
 | --------- | ---- | -------------------------- | -------------------------- |
@@ -269,7 +269,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | productId | INT  | NOT NULL                   | Category name              |
 | taxId     | INT  |                            | Category description       |
 
-### `quotations`
+### `quotations` - DONE
 
 | Column          | Type          | Constraints                         | Description                          |
 | --------------- | ------------- | ----------------------------------- | ------------------------------------ |
@@ -292,7 +292,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | assignedTo      | INT           | FOREIGN KEY (users.id)              | User responsible                     |
 | createdBy       | INT           | FOREIGN KEY (users.id), NOT NULL    | User who created this quotation      |
 
-### `quotationitems`
+### `quotationitems` - DONE
 
 | Column        | Type          | Constraints                           | Description                       |
 | ------------- | ------------- | ------------------------------------- | --------------------------------- |
@@ -302,67 +302,23 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | description   | TEXT          | NOT NULL                              | Item description                  |
 | quantity      | DECIMAL(10,2) | NOT NULL                              | Quantity                          |
 | unitPrice     | DECIMAL(15,2) | NOT NULL                              | Unit price                        |
-| taxRate       | DECIMAL(5,2)  | DEFAULT 0                             | Tax rate for this item            |
+| taxDetails    | TEXT          | DEFAULT 0                             | Tax rate for this item            |
 | taxAmount     | DECIMAL(15,2) | DEFAULT 0                             | Tax amount                        |
 | discountType  | VARCHAR(255)  |                                       | Discount type (percentage, fixed) |
 | discountValue | DECIMAL(15,2) | DEFAULT 0                             | Discount value                    |
 | totalAmount   | DECIMAL(15,2) | NOT NULL                              | Line total amount                 |
 
-### `salesorders`
-
-| Column               | Type          | Constraints                         | Description                               |
-| -------------------- | ------------- | ----------------------------------- | ----------------------------------------- |
-| id                   | INT           | PRIMARY KEY, AUTOINCREMENT          | Unique order identifier                   |
-| orderNumber          | VARCHAR(255)  | UNIQUE, NOT NULL                    | Sales order number                        |
-| quotationId          | INT           | FOREIGN KEY (quotations.id)         | Related quotation                         |
-| accountId            | INT           | FOREIGN KEY (accounts.id), NOT NULL | Customer/account                          |
-| contactId            | INT           | FOREIGN KEY (contacts.id)           | Primary contact                           |
-| orderDate            | DATE          | NOT NULL                            | Date of order                             |
-| expectedDeliveryDate | DATE          |                                     | Expected delivery date                    |
-| status               | VARCHAR(255)  | NOT NULL                            | Status (New, Processing, Completed, etc.) |
-| currency             | VARCHAR(3)    | DEFAULT 'USD'                       | Currency code                             |
-| taxInclusive         | BOOLEAN       | DEFAULT FALSE                       | Whether prices include tax                |
-| subtotal             | DECIMAL(15,2) | NOT NULL                            | Sum of line items                         |
-| taxAmount            | DECIMAL(15,2) | DEFAULT 0                           | Total tax amount                          |
-| discountType         | VARCHAR(255)  |                                     | Discount type (percentage, fixed)         |
-| discountValue        | DECIMAL(15,2) | DEFAULT 0                           | Discount value                            |
-| totalAmount          | DECIMAL(15,2) | NOT NULL                            | Final total amount                        |
-| notes                | TEXT          |                                     | Additional notes                          |
-| terms                | TEXT          |                                     | Terms and conditions                      |
-| assignedTo           | INT           | FOREIGN KEY (users.id)              | User responsible                          |
-| createdBy            | INT           | FOREIGN KEY (users.id), NOT NULL    | User who created this order               |
-
-### `salesorderitems`
-
-| Column        | Type          | Constraints                            | Description                       |
-| ------------- | ------------- | -------------------------------------- | --------------------------------- |
-| id            | INT           | PRIMARY KEY, AUTOINCREMENT             | Unique item identifier            |
-| salesOrderId  | INT           | FOREIGN KEY (salesOrders.id), NOT NULL | References sales order            |
-| productId     | INT           | FOREIGN KEY (products.id)              | References product                |
-| description   | TEXT          | NOT NULL                               | Item description                  |
-| quantity      | DECIMAL(10,2) | NOT NULL                               | Quantity                          |
-| unitPrice     | DECIMAL(15,2) | NOT NULL                               | Unit price                        |
-| taxRate       | DECIMAL(5,2)  | DEFAULT 0                              | Tax rate for this item            |
-| taxAmount     | DECIMAL(15,2) | DEFAULT 0                              | Tax amount                        |
-| discountType  | VARCHAR(255)  |                                        | Discount type (percentage, fixed) |
-| discountValue | DECIMAL(15,2) | DEFAULT 0                              | Discount value                    |
-| totalAmount   | DECIMAL(15,2) | NOT NULL                               | Line total amount                 |
-
-### `invoices`
+### `invoices`- DONE
 
 | Column        | Type          | Constraints                         | Description                               |
 | ------------- | ------------- | ----------------------------------- | ----------------------------------------- |
 | id            | INT           | PRIMARY KEY, AUTOINCREMENT          | Unique invoice identifier                 |
 | invoiceNumber | VARCHAR(255)  | UNIQUE, NOT NULL                    | Invoice number                            |
-| salesOrderId  | INT           | FOREIGN KEY (salesOrders.id)        | Related sales order                       |
 | accountId     | INT           | FOREIGN KEY (accounts.id), NOT NULL | Customer/account                          |
 | contactId     | INT           | FOREIGN KEY (contacts.id)           | Primary contact                           |
 | invoiceDate   | DATE          | NOT NULL                            | Date of invoice                           |
 | dueDate       | DATE          | NOT NULL                            | Payment due date                          |
 | status        | VARCHAR(255)  | NOT NULL                            | Status (Draft, Sent, Paid, Overdue, etc.) |
-| currency      | VARCHAR(3)    | DEFAULT 'USD'                       | Currency code                             |
-| taxInclusive  | BOOLEAN       | DEFAULT FALSE                       | Whether prices include tax                |
-| subtotal      | DECIMAL(15,2) | NOT NULL                            | Sum of line items                         |
 | taxAmount     | DECIMAL(15,2) | DEFAULT 0                           | Total tax amount                          |
 | discountType  | VARCHAR(255)  |                                     | Discount type (percentage, fixed)         |
 | discountValue | DECIMAL(15,2) | DEFAULT 0                           | Discount value                            |
@@ -374,7 +330,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | assignedTo    | INT           | FOREIGN KEY (users.id)              | User responsible                          |
 | createdBy     | INT           | FOREIGN KEY (users.id), NOT NULL    | User who created this invoice             |
 
-### `invoiceitems`
+### `invoiceitems` - DONE
 
 | Column        | Type          | Constraints                         | Description                       |
 | ------------- | ------------- | ----------------------------------- | --------------------------------- |
@@ -384,7 +340,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | description   | TEXT          | NOT NULL                            | Item description                  |
 | quantity      | DECIMAL(10,2) | NOT NULL                            | Quantity                          |
 | unitPrice     | DECIMAL(15,2) | NOT NULL                            | Unit price                        |
-| taxRate       | DECIMAL(5,2)  | DEFAULT 0                           | Tax rate for this item            |
+| taxDetails    | TEXT          | DEFAULT 0                           | Tax rate for this item            |
 | taxAmount     | DECIMAL(15,2) | DEFAULT 0                           | Tax amount                        |
 | discountType  | VARCHAR(255)  |                                     | Discount type (percentage, fixed) |
 | discountValue | DECIMAL(15,2) | DEFAULT 0                           | Discount value                    |
@@ -414,7 +370,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | reference       | VARCHAR(255)  |                                           | External reference number              |
 | notes           | TEXT          |                                           | Additional notes                       |
 | entityType      | VARCHAR(255)  | NOT NULL                                  | Related entity type (invoice, expense) |
-| paymentImage      | VARCHAR(255)  | NOT NULL                                  | Related entity type (invoice, expense) |
+| paymentImage    | VARCHAR(255)  | NOT NULL                                  | Related entity type (invoice, expense) |
 | entityId        | INT           | NOT NULL                                  | ID of the related entity               |
 | accountId       | INT           | FOREIGN KEY (accounts.id)                 | Related account/customer               |
 | createdBy       | INT           | FOREIGN KEY (users.id), NOT NULL          | User who recorded this payment         |
@@ -430,21 +386,21 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 
 ### `expenses` - DONE
 
-| Column             | Type          | Constraints                                  | Description                    |
-| ------------------ | ------------- | -------------------------------------------- | ------------------------------ |
-| id                 | INT           | PRIMARY KEY, AUTOINCREMENT                   | Unique expense identifier      |
-| expenseNumber      | VARCHAR(255)  | UNIQUE, NOT NULL                             | Expense reference number       |
-| categoryId         | INT           | FOREIGN KEY (expensecategories.id), NOT NULL | Expense category               |
-| expenseDate        | DATE          | NOT NULL                                     | Date of expense                |
-| amount             | DECIMAL(15,2) | NOT NULL                                     | Expense amount                 |
-| taxAmount          | DECIMAL(15,2) | DEFAULT 0                                    | Tax amount                     |
-| totalAmount        | DECIMAL(15,2) | NOT NULL                                     | Total amount                   |
-| vendor             | VARCHAR(255)  |                                              | Vendor/supplier name           |
-| description        | TEXT          |                                              | Description                    |
-| paymentMethodId    | INT           | FOREIGN KEY (paymentMethods.id)              | Payment method                 |
-| reference          | VARCHAR(255)  |                                              | Receipt/reference number       |
-| receiptImage       | VARCHAR(255)  |                                              | Path to receipt image          |
-| createdBy          | INT           | FOREIGN KEY (users.id), NOT NULL             | User who recorded this expense |
+| Column          | Type          | Constraints                                  | Description                    |
+| --------------- | ------------- | -------------------------------------------- | ------------------------------ |
+| id              | INT           | PRIMARY KEY, AUTOINCREMENT                   | Unique expense identifier      |
+| expenseNumber   | VARCHAR(255)  | UNIQUE, NOT NULL                             | Expense reference number       |
+| categoryId      | INT           | FOREIGN KEY (expensecategories.id), NOT NULL | Expense category               |
+| expenseDate     | DATE          | NOT NULL                                     | Date of expense                |
+| amount          | DECIMAL(15,2) | NOT NULL                                     | Expense amount                 |
+| taxAmount       | DECIMAL(15,2) | DEFAULT 0                                    | Tax amount                     |
+| totalAmount     | DECIMAL(15,2) | NOT NULL                                     | Total amount                   |
+| vendor          | VARCHAR(255)  |                                              | Vendor/supplier name           |
+| description     | TEXT          |                                              | Description                    |
+| paymentMethodId | INT           | FOREIGN KEY (paymentMethods.id)              | Payment method                 |
+| reference       | VARCHAR(255)  |                                              | Receipt/reference number       |
+| receiptImage    | VARCHAR(255)  |                                              | Path to receipt image          |
+| createdBy       | INT           | FOREIGN KEY (users.id), NOT NULL             | User who recorded this expense |
 
 ## Projects & Tasks Module
 
@@ -560,7 +516,7 @@ I'll design a comprehensive database schema for your NodeJS and MySQL-based ERP 
 | isread     | BOOLEAN      | DEFAULT FALSE                    | Whether notification is read   |
 | readat     | TIMESTAMP    |                                  | When notification was read     |
 
-### `emailtemplates`
+### `emailtemplates` - DONE
 
 | Column      | Type         | Constraints                      | Description                     |
 | ----------- | ------------ | -------------------------------- | ------------------------------- |
