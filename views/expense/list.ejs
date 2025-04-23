@@ -1,0 +1,235 @@
+<div class="content-wrapper">
+  <%- include('../partials/page_title'); %> <%- include('./create'); %> <%- include('./update'); %>
+  <section class="content">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title mt-1"><b><%= title %> List</b></h3>
+        <div class="card-tools pr-2">
+          <a
+            data-toggle="modal"
+            data-target="#createExpenseModal"
+            href="#"
+            class="btn btn-primary btn-sm"
+          >
+            <i class="fas fa-plus"></i> Add New <%= singleTitle %>
+          </a>
+        </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table
+          id="expenseList"
+          class="table table-bordered table-sm table-striped"
+        >
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Expense Number</th>
+              <th>Date</th>
+              <th>Vendor</th>
+              <th>Amount</th>
+              <th>Total Amount</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% expenses.forEach(function(expense) { %>
+            <tr>
+              <td><%= expense.id %></td>
+              <td><%= expense.expenseNumber %></td>
+              <td><%= new Date(expense.expenseDate).toLocaleDateString() %></td>
+              <td><%= expense.vendor %></td>
+              <td><%= expense.amount %></td>
+              <td><%= expense.totalAmount %></td>
+              <td>
+                <a href="#" class="btn btn-info btn-xs">
+                  <i class="fas fa-info-circle"></i> View
+                </a>
+                <a
+                  class="btn updateExpense btn-primary btn-xs"
+                  data-id="<%= expense.id %>"
+                >
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+                <a
+                  href="#"
+                  data-id="<%= expense.id %>"
+                  class="deleteExpense btn btn-danger btn-xs"
+                >
+                  <i class="fas fa-trash"></i> Delete
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>ID</th>
+              <th>Expense Number</th>
+              <th>Date</th>
+              <th>Vendor</th>
+              <th>Amount</th>
+              <th>Total Amount</th>
+              <th>Actions</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  $(document).ready(function () {
+    // Initialize DataTable
+    $("#expenseList").DataTable({
+      responsive: true,
+      autoWidth: false,
+    });
+
+    // Update functionality
+    $(".updateExpense").click(function () {
+      const expenseId = $(this).data("id");
+      $.ajax({
+        url: "<%= baseUrl %>expense/read/" + expenseId,
+        type: "GET",
+        success: function (response) {
+          if (response.data) {
+            const expense = response.data;
+            // Populate form fields
+            $("#updateExpenseForm input[name=expenseNumber]").val(expense.expenseNumber);
+            $("#updateExpenseForm input[name=expenseDate]").val(new Date(expense.expenseDate).toISOString().split('T')[0]);
+            $("#updateExpenseForm input[name=amount]").val(expense.amount);
+            $("#updateExpenseForm input[name=taxAmount]").val(expense.taxAmount);
+            $("#updateExpenseForm input[name=categoryId]").val(expense.categoryId);
+            $("#updateExpenseForm input[name=totalAmount]").val(expense.totalAmount);
+            $("#updateExpenseForm input[name=vendor]").val(expense.vendor);
+            $("#updateExpenseForm textarea[name=description]").val(expense.description);
+            $("#updateExpenseForm input[name=paymentMethodId]").val(expense.paymentMethodId);
+            $("#updateExpenseForm input[name=reference]").val(expense.reference);
+            $("#updateExpenseForm input[name=receiptImage]").val(expense.receiptImage);
+            $("#updateExpenseForm").data("id", expenseId);
+            $("#updateExpenseModal").modal("show");
+          }
+        },
+        error: function (xhr) {
+          Swal.fire({
+            title: "Error!",
+            text: xhr.responseJSON?.message || "Failed to fetch expense details",
+            icon: "error",
+          });
+        },
+      });
+    });
+
+    // Delete functionality with SweetAlert
+    $(".deleteExpense").click(function () {
+      const expenseId = $(this).data("id");
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // AJAX request to delete expense
+          $.ajax({
+            url: "<%= baseUrl %>expense/delete/" + expenseId,
+            type: "DELETE",
+            success: function (response, textStatus, xhr) {
+              if (xhr.status == 200) {
+                Swal.fire({
+                  title: "Deleted!",
+                  text: "<%= singleTitle %> has been deleted successfully.",
+                  icon: "success",
+                  timer: 1500,
+                  showConfirmButton: false,
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  title: "Error!",
+                  text: response.message || "Failed to delete item.",
+                  icon: "error",
+                });
+              }
+            },
+            error: function (xhr) {
+              Swal.fire({
+                title: "Error!",
+                text:
+                  xhr.responseJSON?.message ||
+                  "An error occurred while deleting the item.",
+                icon: "error",
+              });
+            },
+          });
+        }
+      });
+    });
+  });
+</script> 
+
+
+<script>
+  $(document).ready(function () {
+    const form = document.getElementById("updateExpenseForm");
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const expenseId = $(this).data("id");
+      const formData = {
+        expenseNumber: $("#updateExpenseForm input[name=expenseNumber]").val(),
+        expenseDate: $("#updateExpenseForm input[name=expenseDate]").val(),
+        amount: parseFloat($("#updateExpenseForm input[name=amount]").val()),
+        taxAmount: parseFloat($("#updateExpenseForm input[name=taxAmount]").val()),
+        categoryId: parseInt($("#updateExpenseForm input[name=categoryId]").val()),
+        totalAmount: parseFloat($("#updateExpenseForm input[name=totalAmount]").val()),
+        vendor: $("#updateExpenseForm input[name=vendor]").val(),
+        description: $("#updateExpenseForm textarea[name=description]").val(),
+        paymentMethodId: $("#updateExpenseForm input[name=paymentMethodId]").val(),
+        reference: $("#updateExpenseForm input[name=reference]").val(),
+        receiptImage: $("#updateExpenseForm input[name=receiptImage]").val(),
+      };
+
+      $.ajax({
+        url: "<%= baseUrl %>expense/update/" + expenseId,
+        type: "PATCH",
+        data: JSON.stringify(formData),
+        contentType: "application/json",
+        success: function (response, textStatus, xhr) {
+          console.log(response);
+          if (xhr.status == 200) {
+            Swal.fire({
+              title: "Success!",
+              text: response.message,
+              icon: "success",
+              confirmButtonText: "OK",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                location.reload();
+              }
+            });
+          }
+        },
+        error: function (xhr) {
+          let errorMessage = "An error occurred while updating the expense.";
+          if (xhr.responseJSON && xhr.responseJSON.message) {
+            errorMessage = xhr.responseJSON.message;
+          }
+          Swal.fire({
+            title: "Error!",
+            text: errorMessage,
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        },
+      });
+    });
+  });
+</script> 

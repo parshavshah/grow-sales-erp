@@ -1,0 +1,161 @@
+<div class="modal fade" id="updateExpenseModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><%= singleTitle %> Update</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="updateExpenseForm">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="expenseNumber">Expense Number</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="expenseNumber"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="expenseDate">Date</label>
+                <input
+                  type="date"
+                  class="form-control form-control-sm"
+                  name="expenseDate"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="amount">Amount</label>
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  name="amount"
+                  step="0.01"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="taxAmount">Tax Amount</label>
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  name="taxAmount"
+                  step="0.01"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="categoryId">Category</label>
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  name="categoryId"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="totalAmount">Total Amount</label>
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  name="totalAmount"
+                  step="0.01"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="vendor">Vendor</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="vendor"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="paymentMethodId">Payment Method</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="paymentMethodId"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="description">Description</label>
+                <textarea
+                  class="form-control form-control-sm"
+                  name="description"
+                  rows="3"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="reference">Reference</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="reference"
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="receiptImage">Receipt Image</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="receiptImage"
+                />
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

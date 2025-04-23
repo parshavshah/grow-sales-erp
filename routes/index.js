@@ -10,6 +10,7 @@ const AccountController = require("../controllers/account.controller");
 const CustomFieldController = require("../controllers/customfield.controller");
 const ContactController = require("../controllers/contact.controller");
 const ExpenseCategoryController = require("../controllers/expensecategory.controller");
+const ExpenseController = require("../controllers/expense.controller");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -81,5 +82,13 @@ router.patch("/expensecategory/update/:id", ExpenseCategoryController.updateExpe
 router.patch("/expensecategory/status/:id", ExpenseCategoryController.updateExpenseCategoryStatusAPI);
 router.get("/expensecategory/read/:id", ExpenseCategoryController.readExpenseCategoryAPI);
 router.delete("/expensecategory/delete/:id", ExpenseCategoryController.deleteExpenseCategoryAPI);
+
+// Expense routes
+router.get("/expense/list", ExpenseController.listExpenseView);
+router.post("/expense/create", ExpenseController.createExpenseAPI);
+router.patch("/expense/update/:id", ExpenseController.updateExpenseAPI);
+router.get("/expense/read/:id", ExpenseController.readExpenseAPI);
+router.delete("/expense/delete/:id", ExpenseController.deleteExpenseAPI);
+router.patch("/expense/status/:id", ExpenseController.updateExpenseStatusAPI);
 
 module.exports = router;

@@ -1,0 +1,219 @@
+<div class="modal fade" id="createExpenseModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><%= singleTitle %> Create</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="createExpenseForm">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="expenseNumber">Expense Number</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="expenseNumber"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="expenseDate">Date</label>
+                <input
+                  type="date"
+                  class="form-control form-control-sm"
+                  name="expenseDate"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="amount">Amount</label>
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  name="amount"
+                  step="0.01"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="taxAmount">Tax Amount</label>
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  name="taxAmount"
+                  step="0.01"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="categoryId">Category</label>
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  name="categoryId"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="totalAmount">Total Amount</label>
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  name="totalAmount"
+                  step="0.01"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="vendor">Vendor</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="vendor"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="paymentMethodId">Payment Method</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="paymentMethodId"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="description">Description</label>
+                <textarea
+                  class="form-control form-control-sm"
+                  name="description"
+                  rows="3"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="reference">Reference</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="reference"
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="receiptImage">Receipt Image</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="receiptImage"
+                />
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    const form = document.getElementById("createExpenseForm");
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const formData = {
+        expenseNumber: $("input[name=expenseNumber]").val(),
+        expenseDate: $("input[name=expenseDate]").val(),
+        amount: parseFloat($("input[name=amount]").val()),
+        taxAmount: parseFloat($("input[name=taxAmount]").val()),
+        categoryId: parseInt($("input[name=categoryId]").val()),
+        totalAmount: parseFloat($("input[name=totalAmount]").val()),
+        vendor: $("input[name=vendor]").val(),
+        description: $("textarea[name=description]").val(),
+        paymentMethodId: $("input[name=paymentMethodId]").val(),
+        reference: $("input[name=reference]").val(),
+        receiptImage: $("input[name=receiptImage]").val(),
+      };
+
+      $.ajax({
+        url: "<%= baseUrl %>expense/create",
+        type: "POST",
+        data: JSON.stringify(formData),
+        contentType: "application/json",
+        success: function (response, textStatus, xhr) {
+          console.log(response);
+          if (xhr.status == 201) {
+            Swal.fire({
+              title: "Success!",
+              text: response.message,
+              icon: "success",
+              confirmButtonText: "OK",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                location.reload();
+              }
+            });
+          }
+        },
+        error: function (xhr) {
+          let errorMessage = "An error occurred while creating the expense.";
+          if (xhr.responseJSON && xhr.responseJSON.message) {
+            errorMessage = xhr.responseJSON.message;
+          }
+          Swal.fire({
+            title: "Error!",
+            text: errorMessage,
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        },
+      });
+    });
+  });
+</script> 
