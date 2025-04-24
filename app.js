@@ -5,6 +5,8 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var expressLayouts = require("express-ejs-layouts");
 var i18n = require("i18n-express");
+var session = require("express-session");
+const bodyParser = require("body-parser");
 
 var indexRouter = require("./routes/index");
 
@@ -27,6 +29,18 @@ app.use(
     textsVarName: "t",
   })
 );
+app.set("trust proxy", 1);
+app.use(
+  session({
+    secret: "parshav@123",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 60 * 60 * 1000 * 10 },
+  })
+);
+
+app.use(bodyParser.json()); // for json
+app.use(bodyParser.urlencoded({ extended: true })); // for form data
 
 app.use("/", indexRouter);
 

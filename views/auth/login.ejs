@@ -1,0 +1,99 @@
+<!-- Add jQuery and SweetAlert2 CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="register-box">
+  <div class="register-logo">
+    <a href="#"><b>Grow Salesio</b></a>
+  </div>
+
+  <div class="card">
+    <div class="card-body register-card-body">
+      <p class="login-box-msg">Login to your account</p>
+
+      <form id="loginForm" method="post">
+        <div class="input-group mb-3">
+          <input
+            type="email"
+            class="form-control"
+            name="email"
+            placeholder="Email"
+            required
+          />
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            placeholder="Password"
+            required
+          />
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-block">
+              Login
+            </button>
+          </div>
+        </div>
+      </form>
+      <div class="col-12 text-center mt-2">
+        <a href="#" class="">I already have a membership</a>
+      </div>
+    </div>
+    <!-- /.form-box -->
+  </div>
+  <!-- /.card -->
+</div>
+<!-- /.register-box -->
+
+<script>
+  $("#loginForm").on("submit", function (e) {
+    e.preventDefault();
+
+    $.ajax({
+      url: "/login",
+      type: "POST",
+      data: $(this).serialize(),
+      success: function (data, _, xhr) {
+        if (xhr.status == 200) {
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: "Login successful!",
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            window.location.href = "/admin/list";
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error!",
+            text: data.message || "Login failed. Please try again.",
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: xhr.responseJSON.message,
+        });
+        console.error("Error:", error);
+      },
+    });
+  });
+</script>

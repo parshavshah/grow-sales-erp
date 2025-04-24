@@ -16,11 +16,14 @@ const PaymentController = require("../controllers/payment.controller");
 const ProductController = require("../controllers/product.controller");
 const TodoController = require("../controllers/todo.controller");
 const EmailTemplateController = require("../controllers/emailtemplate.controller");
-
+const AuthController = require("../controllers/auth.controller");
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Express", layout: "layouts/admin_layout" });
 });
+
+router.get("/login", AuthController.loginView);
+router.post("/login", AuthController.loginAPI);
 
 router.get("/base/list", BaseController.listRecordView);
 router.post("/base/create", BaseController.createRecordAPI);

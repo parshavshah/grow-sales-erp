@@ -35,6 +35,9 @@ module.exports = {
    */
   listAdminView: async (req, res) => {
     try {
+
+      console.log(req.session)
+
       const admins = await ADMIN_MODEL.findAll({
         order: [["id", "DESC"]],
         raw: true,
@@ -49,7 +52,7 @@ module.exports = {
         ],
       });
 
-      console.log({admins})
+      // console.log({admins})
 
       res.render(`${VIEW_PATH}/list`, {
         admins,
