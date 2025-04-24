@@ -3,6 +3,7 @@ var router = express.Router();
 
 const BaseController = require("../controllers/base.controller");
 const EmployeeController = require("../controllers/employee.controller");
+const AdminController = require("../controllers/admin.controller");
 const TaxController = require("../controllers/tax.controller");
 const PaymentMethodController = require("../controllers/paymentmethod.controller");
 const LeadController = require("../controllers/lead.controller");
@@ -33,6 +34,15 @@ router.patch("/employee/update/:id", EmployeeController.updateEmployeeAPI);
 router.get("/employee/read/:id", EmployeeController.readEmployeeAPI);
 router.delete("/employee/delete/:id", EmployeeController.deleteEmployeeAPI);
 router.patch("/employee/status/:id", EmployeeController.updateEmployeeStatusAPI);
+
+
+router.get("/admin/list", AdminController.listAdminView);
+router.post("/admin/create", AdminController.createAdminAPI);
+router.patch("/admin/update/:id", AdminController.updateAdminAPI);
+router.get("/admin/read/:id", AdminController.readAdminAPI);
+router.delete("/admin/delete/:id", AdminController.deleteAdminAPI);
+router.patch("/admin/status/:id", AdminController.updateAdminStatusAPI);
+
 
 // Todo routes
 router.get("/todo/list", TodoController.listTodoView);

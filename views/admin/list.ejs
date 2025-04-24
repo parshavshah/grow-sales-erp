@@ -1,0 +1,273 @@
+<div class="content-wrapper">
+  <%- include('../partials/page_title'); %> <%- include('./create'); %> <%-
+  include('./update'); %>
+  <section class="content">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title mt-1"><b><%= title %> List</b></h3>
+        <div class="card-tools pr-2">
+          <a
+            data-toggle="modal"
+            data-target="#createAdminModal"
+            href="#"
+            class="btn btn-primary btn-sm"
+          >
+            <i class="fas fa-plus"></i> Add New <%= singleTitle %>
+          </a>
+        </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table
+          id="adminList"
+          class="table table-bordered table-sm table-striped"
+        >
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% admins.forEach(function(admin) { %>
+            <tr>
+              <td><%= admin.id %></td>
+              <td><%= admin.firstName + " " + admin.lastName %></td>
+              <td><%= admin.email %></td>
+              <td><%= admin.phone %></td>
+              <td>
+                <% var className = admin.status === 'active' ? 'success' :
+                'danger'; %>
+                <a
+                  href="#"
+                  class="btn btn-<%= className %> btn-xs text-capitalize statusChange"
+                  data-status="<%= admin.status %>"
+                  data-id="<%= admin.id %>"
+                  ><%= admin.status %></a
+                >
+              </td>
+              <td>
+                <a href="#" class="btn btn-info btn-xs">
+                  <i class="fas fa-info-circle"></i> View
+                </a>
+                <a
+                  class="btn updateAdmin btn-primary btn-xs"
+                  data-id="<%= admin.id %>"
+                >
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+                <a
+                  href="#"
+                  data-id="<%= admin.id %>"
+                  class="deleteAdmin btn btn-danger btn-xs"
+                >
+                  <i class="fas fa-trash"></i> Delete
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  $(function () {
+    // datatable code
+    $("#adminList")
+      .DataTable({
+        responsive: true,
+        lengthChange: false,
+        autoWidth: false,
+        order: false,
+        pageLength: 10,
+        lengthChange: true,
+      })
+      .buttons()
+      .container();
+
+    $(".statusChange").click(function () {
+      const adminId = $(this).data("id");
+      const currentStatus = $(this).data("status");
+      const updateStatus = currentStatus == "active" ? "inactive" : "active";
+      Swal.fire({
+        title: "Are you sure?",
+        text: `Want to change status ${currentStatus} to ${updateStatus}`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, change it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // AJAX request to delete permission
+          $.ajax({
+            url: "<%= baseUrl %>admin/status/" + adminId,
+            type: "PATCH",
+            data: { status: updateStatus },
+            success: function (response, textStatus, xhr) {
+              if (xhr.status == 200) {
+                Swal.fire({
+                  title: "Status changed!",
+                  text: "<%= singleTitle %> has been updated successfully.",
+                  icon: "success",
+                  timer: 1500,
+                  showConfirmButton: false,
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  title: "Error!",
+                  text: response.message || "Failed to update admin status.",
+                  icon: "error",
+                });
+              }
+            },
+            error: function (xhr) {
+              Swal.fire({
+                title: "Error!",
+                text:
+                  xhr.responseJSON?.message ||
+                  "An error occurred while updating the admin.",
+                icon: "error",
+              });
+            },
+          });
+        }
+      });
+    });
+
+    // Delete functionality with SweetAlert
+    $(".deleteAdmin").click(function () {
+      const adminId = $(this).data("id");
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // AJAX request to delete permission
+          $.ajax({
+            url: "<%= baseUrl %>admin/delete/" + adminId,
+            type: "DELETE",
+            success: function (response, textStatus, xhr) {
+              if (xhr.status == 200) {
+                Swal.fire({
+                  title: "Deleted!",
+                  text: "<%= singleTitle %> has been deleted successfully.",
+                  icon: "success",
+                  timer: 1500,
+                  showConfirmButton: false,
+                }).then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire({
+                  title: "Error!",
+                  text: response.message || "Failed to delete item.",
+                  icon: "error",
+                });
+              }
+            },
+            error: function (xhr) {
+              Swal.fire({
+                title: "Error!",
+                text:
+                  xhr.responseJSON?.message ||
+                  "An error occurred while deleting the item.",
+                icon: "error",
+              });
+            },
+          });
+        }
+      });
+    });
+
+    // Update functionality with SweetAlert
+    $(".updateAdmin").click(function () {
+      const adminId = $(this).data("id");
+      $.ajax({
+        url: "<%= baseUrl %>admin/read/" + adminId,
+        type: "GET",
+        success: function (response) {
+          const data = response.data;
+          console.log(response);
+          $("#updateAdminModal").modal("show");
+          $("#updateAdminForm input[name=firstName]").val(data.firstName);
+          $("#updateAdminForm input[name=lastName]").val(data.lastName);
+          $("#updateAdminForm input[name=phone]").val(data.phone);
+          $("#updateAdminForm input[name=email]").val(data.email);
+          $(".adminIdUpdate").text(data.id);
+
+          $("#updateAdminForm").submit(function (event) {
+            event.preventDefault();
+
+            const formData = {
+              firstName: $("#updateAdminForm input[name=firstName]").val(),
+              lastName: $("#updateAdminForm input[name=lastName]").val(),
+              phone: $("#updateAdminForm input[name=phone]").val(),
+              email: $("#updateAdminForm input[name=email]").val(),
+            };
+
+            $.ajax({
+              url: "<%= baseUrl %>admin/update/" + adminId,
+              type: "PATCH",
+              data: JSON.stringify(formData),
+              contentType: "application/json",
+              success: function (response, textStatus, xhr) {
+                if (xhr.status == 200) {
+                  Swal.fire({
+                    title: "Success!",
+                    text: response.message,
+                    icon: "success",
+                    confirmButtonText: "OK",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      location.reload();
+                    }
+                  });
+                }
+              },
+              error: function (xhr) {
+                let errorMessage = "An error occurred while creating the role.";
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                  errorMessage = xhr.responseJSON.message;
+                }
+                Swal.fire({
+                  title: "Error!",
+                  text: errorMessage,
+                  icon: "error",
+                  confirmButtonText: "OK",
+                });
+              },
+            });
+          });
+        },
+        error: function (xhr) {
+          console.error(xhr);
+        },
+      });
+    });
+  });
+</script>

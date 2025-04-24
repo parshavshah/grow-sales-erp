@@ -1,9 +1,9 @@
 const { User, UserRole, Role } = require("../models/index");
 const Joi = require("joi");
-const { roles, status } = require("../utils/constant");
-const VIEW_PATH = "employee";
-const MODULE_TITLE_SINGLE = "Employee";
-const MODULE_TITLE_PLURAL = "Employees";
+const { status } = require("../utils/constant");
+const VIEW_PATH = "admin";
+const MODULE_TITLE_SINGLE = "Admin";
+const MODULE_TITLE_PLURAL = "Admins";
 const EMPLOYEE_MODEL = User;
 const ROLE_MODEL = Role;
 const USER_ROLE_MODEL = UserRole;
@@ -25,43 +25,43 @@ const EMPLOYEE_STATUS_SCHEMA = Joi.object({
 });
 
 /**
- * Base controller containing CRUD operations for employees
+ * Base controller containing CRUD operations for admins
  */
 module.exports = {
   /**
-   * Render the list view with paginated employees
+   * Render the list view with paginated admins
    * @param {Object} req - Express request object
    * @param {Object} res - Express response object
    */
-  listEmployeeView: async (req, res) => {
+  listAdminView: async (req, res) => {
     try {
-      const employees = await EMPLOYEE_MODEL.findAll({
+      const admins = await EMPLOYEE_MODEL.findAll({
         order: [["id", "DESC"]],
         raw: true,
       });
 
       res.render(`${VIEW_PATH}/list`, {
-        employees,
+        admins,
         layout: "../views/layouts/admin_layout.ejs",
         baseUrl: process.env.BASE_URL,
         title: MODULE_TITLE_PLURAL,
         singleTitle: MODULE_TITLE_SINGLE,
       });
     } catch (error) {
-      console.error("Error in listEmployeeView:", error);
+      console.error("Error in listAdminView:", error);
       res.status(500).json({
-        message: "Failed to fetch employees",
+        message: "Failed to fetch admins",
         error: error.message,
       });
     }
   },
 
   /**
-   * Create a new employee
+   * Create a new admin
    * @param {Object} req - Express request object
    * @param {Object} res - Express response object
    */
-  createEmployeeAPI: async (req, res) => {
+  createAdminAPI: async (req, res) => {
     try {
       const { error, value } = EMPLOYEE_VALIDATION_SCHEMA.validate(req.body, {
         abortEarly: false,
@@ -103,7 +103,7 @@ module.exports = {
       // create user role
       const role = await ROLE_MODEL.findOne({
         where: {
-          name: "Employee",
+          name: "Admin",
         },
         raw: true,
       });
@@ -129,11 +129,11 @@ module.exports = {
   },
 
   /**
-   * Update an existing employee
+   * Update an existing admin
    * @param {Object} req - Express request object
    * @param {Object} res - Express response object
    */
-  updateEmployeeAPI: async (req, res) => {
+  updateAdminAPI: async (req, res) => {
     try {
       // Validate body
       const { error, value } = EMPLOYEE_VALIDATION_SCHEMA.validate(req.body, {
@@ -148,8 +148,8 @@ module.exports = {
         });
       }
 
-      const employee = await EMPLOYEE_MODEL.findByPk(req.params.id);
-      if (!employee) {
+      const admin = await EMPLOYEE_MODEL.findByPk(req.params.id);
+      if (!admin) {
         return res.status(404).json({
           message: `${MODULE_TITLE_SINGLE} not found`,
         });
@@ -166,11 +166,11 @@ module.exports = {
         });
       }
 
-      const updatedEmployee = await EMPLOYEE_MODEL.findByPk(req.params.id);
+      const updatedAdmin = await EMPLOYEE_MODEL.findByPk(req.params.id);
 
       res.status(200).json({
         message: `${MODULE_TITLE_SINGLE} updated successfully`,
-        data: updatedEmployee,
+        data: updatedAdmin,
       });
     } catch (error) {
       console.error(`Error updating ${MODULE_TITLE_SINGLE}:`, error);
@@ -182,11 +182,11 @@ module.exports = {
   },
 
   /**
-   * Update an status of the employee
+   * Update an status of the admin
    * @param {Object} req - Express request object
    * @param {Object} res - Express response object
    */
-  updateEmployeeStatusAPI: async (req, res) => {
+  updateAdminStatusAPI: async (req, res) => {
     try {
       console.log(req.body);
       // Validate body
@@ -206,8 +206,8 @@ module.exports = {
 
       console.log({ value });
 
-      const employee = await EMPLOYEE_MODEL.findByPk(req.params.id);
-      if (!employee) {
+      const admin = await EMPLOYEE_MODEL.findByPk(req.params.id);
+      if (!admin) {
         return res.status(404).json({
           message: `${MODULE_TITLE_SINGLE} not found`,
         });
@@ -237,14 +237,14 @@ module.exports = {
   },
 
   /**
-   * Read a single employee
+   * Read a single admin
    * @param {Object} req - Express request object
    * @param {Object} res - Express response object
    */
-  readEmployeeAPI: async (req, res) => {
+  readAdminAPI: async (req, res) => {
     try {
-      const employee = await EMPLOYEE_MODEL.findByPk(req.params.id);
-      if (!employee) {
+      const admin = await EMPLOYEE_MODEL.findByPk(req.params.id);
+      if (!admin) {
         return res.status(404).json({
           message: `${MODULE_TITLE_SINGLE} not found`,
         });
@@ -252,7 +252,7 @@ module.exports = {
 
       res.status(200).json({
         message: `${MODULE_TITLE_SINGLE} retrieved successfully`,
-        data: employee,
+        data: admin,
       });
     } catch (error) {
       console.error(`Error reading ${MODULE_TITLE_SINGLE}:`, error);
@@ -264,14 +264,14 @@ module.exports = {
   },
 
   /**
-   * Delete a employee
+   * Delete a admin
    * @param {Object} req - Express request object
    * @param {Object} res - Express response object
    */
-  deleteEmployeeAPI: async (req, res) => {
+  deleteAdminAPI: async (req, res) => {
     try {
-      const employee = await EMPLOYEE_MODEL.findByPk(req.params.id);
-      if (!employee) {
+      const admin = await EMPLOYEE_MODEL.findByPk(req.params.id);
+      if (!admin) {
         return res.status(404).json({
           message: `${MODULE_TITLE_SINGLE} not found`,
         });
