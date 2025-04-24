@@ -4,7 +4,7 @@ const { status } = require("../utils/constant");
 const VIEW_PATH = "admin";
 const MODULE_TITLE_SINGLE = "Admin";
 const MODULE_TITLE_PLURAL = "Admins";
-const EMPLOYEE_MODEL = User;
+const ADMIN_MODEL = User;
 const ROLE_MODEL = Role;
 const USER_ROLE_MODEL = UserRole;
 const bcrypt = require("bcrypt");
@@ -35,10 +35,21 @@ module.exports = {
    */
   listAdminView: async (req, res) => {
     try {
-      const admins = await EMPLOYEE_MODEL.findAll({
+      const admins = await ADMIN_MODEL.findAll({
         order: [["id", "DESC"]],
         raw: true,
+        nest : true,
+        include: [
+          {
+            association: "roles",
+            where : {
+              name : 'Admin'
+            }
+          },
+        ],
       });
+
+      console.log({admins})
 
       res.render(`${VIEW_PATH}/list`, {
         admins,
@@ -76,7 +87,7 @@ module.exports = {
       }
 
       // check user exists or not
-      const isExist = await EMPLOYEE_MODEL.count({
+      const isExist = await ADMIN_MODEL.count({
         where: {
           email: value.email,
         },
@@ -98,7 +109,7 @@ module.exports = {
       value.passwordHash = passwordHash;
 
       // insert process
-      const insertProcess = await EMPLOYEE_MODEL.create(value);
+      const insertProcess = await ADMIN_MODEL.create(value);
 
       // create user role
       const role = await ROLE_MODEL.findOne({
@@ -148,14 +159,14 @@ module.exports = {
         });
       }
 
-      const admin = await EMPLOYEE_MODEL.findByPk(req.params.id);
+      const admin = await ADMIN_MODEL.findByPk(req.params.id);
       if (!admin) {
         return res.status(404).json({
           message: `${MODULE_TITLE_SINGLE} not found`,
         });
       }
 
-      const [updatedRows] = await EMPLOYEE_MODEL.update(value, {
+      const [updatedRows] = await ADMIN_MODEL.update(value, {
         where: { id: req.params.id },
         returning: true,
       });
@@ -166,7 +177,7 @@ module.exports = {
         });
       }
 
-      const updatedAdmin = await EMPLOYEE_MODEL.findByPk(req.params.id);
+      const updatedAdmin = await ADMIN_MODEL.findByPk(req.params.id);
 
       res.status(200).json({
         message: `${MODULE_TITLE_SINGLE} updated successfully`,
@@ -206,14 +217,14 @@ module.exports = {
 
       console.log({ value });
 
-      const admin = await EMPLOYEE_MODEL.findByPk(req.params.id);
+      const admin = await ADMIN_MODEL.findByPk(req.params.id);
       if (!admin) {
         return res.status(404).json({
           message: `${MODULE_TITLE_SINGLE} not found`,
         });
       }
 
-      const [updatedRows] = await EMPLOYEE_MODEL.update(value, {
+      const [updatedRows] = await ADMIN_MODEL.update(value, {
         where: { id: req.params.id },
         returning: true,
       });
@@ -243,7 +254,7 @@ module.exports = {
    */
   readAdminAPI: async (req, res) => {
     try {
-      const admin = await EMPLOYEE_MODEL.findByPk(req.params.id);
+      const admin = await ADMIN_MODEL.findByPk(req.params.id);
       if (!admin) {
         return res.status(404).json({
           message: `${MODULE_TITLE_SINGLE} not found`,
@@ -270,14 +281,14 @@ module.exports = {
    */
   deleteAdminAPI: async (req, res) => {
     try {
-      const admin = await EMPLOYEE_MODEL.findByPk(req.params.id);
+      const admin = await ADMIN_MODEL.findByPk(req.params.id);
       if (!admin) {
         return res.status(404).json({
           message: `${MODULE_TITLE_SINGLE} not found`,
         });
       }
 
-      const deletedRows = await EMPLOYEE_MODEL.destroy({
+      const deletedRows = await ADMIN_MODEL.destroy({
         where: { id: req.params.id },
       });
 

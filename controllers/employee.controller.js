@@ -38,6 +38,15 @@ module.exports = {
       const employees = await EMPLOYEE_MODEL.findAll({
         order: [["id", "DESC"]],
         raw: true,
+        nest : true,
+        include: [
+          {
+            association: "roles",
+            where : {
+              name : 'Employee'
+            }
+          },
+        ],
       });
 
       res.render(`${VIEW_PATH}/list`, {
