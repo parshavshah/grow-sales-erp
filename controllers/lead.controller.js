@@ -87,7 +87,8 @@ module.exports = {
       // Set default status if not provided
       value.leadStatus = value.leadStatus || leadStatus.New;
       // value.createdBy = req.user.id; @todo
-      value.createdBy = 0;
+
+      value.createdBy = req.session.user.id || 0;
 
       const insertProcess = await LEAD_MODEL.create(value);
 

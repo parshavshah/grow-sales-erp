@@ -77,8 +77,7 @@ module.exports = {
         });
       }
 
-      // Set default createdBy if not provided
-      value.createdBy = value.createdBy || 0;
+      value.createdBy = req.session.user.id || 0;
 
       const insertProcess = await ACCOUNT_MODEL.create(value);
 
