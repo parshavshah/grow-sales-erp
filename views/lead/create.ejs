@@ -1,5 +1,5 @@
 <div class="modal fade" id="createLeadModal">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title"><%= singleTitle %> Create</h4>
@@ -15,9 +15,11 @@
       <div class="modal-body">
         <form id="createLeadForm">
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
               <div class="form-group">
-                <label for="firstName">First Name</label>
+                <label for="firstName"
+                  >First Name <span class="text-danger">*</span>
+                </label>
                 <input
                   type="text"
                   class="form-control"
@@ -26,9 +28,11 @@
                 />
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
               <div class="form-group">
-                <label for="lastName">Last Name</label>
+                <label for="lastName"
+                  >Last Name <span class="text-danger">*</span></label
+                >
                 <input
                   type="text"
                   class="form-control"
@@ -37,12 +41,12 @@
                 />
               </div>
             </div>
-          </div>
 
-          <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
               <div class="form-group">
-                <label for="email">Email</label>
+                <label for="email"
+                  >Email <span class="text-danger">*</span></label
+                >
                 <input
                   type="email"
                   class="form-control"
@@ -51,124 +55,90 @@
                 />
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
               <div class="form-group">
-                <label for="phone">Phone</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="phone"
-                />
+                <label for="phone"
+                  >Phone <span class="text-danger">*</span></label
+                >
+                <input type="text" class="form-control" name="phone" />
               </div>
             </div>
-          </div>
 
-          <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
               <div class="form-group">
-                <label for="company">Company</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="company"
-                />
+                <label for="company"
+                  >Company <span class="text-danger">*</span></label
+                >
+                <input type="text" class="form-control" name="company" />
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
               <div class="form-group">
-                <label for="jobTitle">Job Title</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="jobTitle"
-                />
+                <label for="jobTitle"
+                  >Query / Product / Requirment
+                  <span class="text-danger">*</span></label
+                >
+                <input type="text" class="form-control" name="jobTitle" />
               </div>
             </div>
-          </div>
 
-          <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
               <div class="form-group">
                 <label for="leadSource">Lead Source</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="leadSource"
-                />
+                <input type="text" class="form-control" name="leadSource" />
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
               <div class="form-group">
                 <label for="industry">Industry</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="industry"
-                />
+                <input type="text" class="form-control" name="industry" />
               </div>
             </div>
-          </div>
 
-          <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-3">
               <div class="form-group">
                 <label for="address">Address</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="address"
-                />
+                <input type="text" class="form-control" name="address" />
               </div>
             </div>
-          </div>
 
-          <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
               <div class="form-group">
                 <label for="city">City</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="city"
-                />
+                <input type="text" class="form-control" name="city" />
               </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <div class="form-group">
                 <label for="state">State</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="state"
-                />
+                <input type="text" class="form-control" name="state" />
               </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <div class="form-group">
                 <label for="zip">ZIP</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="zip"
-                />
+                <input type="text" class="form-control" name="zip" />
               </div>
             </div>
-          </div>
 
-          <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-3">
               <div class="form-group">
                 <label for="country">Country</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="country"
-                />
+                <input type="text" class="form-control" name="country" />
               </div>
             </div>
-          </div>
 
-          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group">
+                <label for="leadStatus">Status</label>
+                <select class="form-control" name="leadStatus">
+                  <% Object.values(leadStatus).forEach(function(status) { %>
+                  <option value="<%= status %>"><%= status %></option>
+                  <% }); %>
+                </select>
+              </div>
+            </div>
+
             <div class="col-md-12">
               <div class="form-group">
                 <label for="description">Description</label>
@@ -177,19 +147,6 @@
                   name="description"
                   rows="3"
                 ></textarea>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="leadStatus">Status</label>
-                <select class="form-control" name="leadStatus">
-                  <% Object.values(leadStatus).forEach(function(status) { %>
-                  <option value="<%= status %>"><%= status %></option>
-                  <% }); %>
-                </select>
               </div>
             </div>
           </div>
@@ -261,4 +218,4 @@
       });
     });
   });
-</script> 
+</script>

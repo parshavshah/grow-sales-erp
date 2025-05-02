@@ -1,5 +1,6 @@
 <div class="content-wrapper">
-  <%- include('../partials/page_title'); %> <%- include('./create'); %> <%- include('./update'); %>
+  <%- include('../partials/page_title'); %> <%- include('./create'); %> <%-
+  include('./update');%> <%- include('./partial_note_page'); %>
   <section class="content">
     <div class="card">
       <div class="card-header">
@@ -17,26 +18,58 @@
       </div>
       <!-- /.card-header -->
       <div class="card-body">
-        <table
-          id="leadList"
-          class="table table-bordered table-sm table-striped"
-        >
+        <div class="row mb-3">
+          <div class="col-md-3">
+            <select id="statusFilter" class="form-control">
+              <option value="">All Statuses</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+        </div>
+        <table id="leadList" class="table table-sm table-striped">
           <thead>
             <tr>
-              <th>ID</th>
+              <th>#</th>
               <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
               <th>Company</th>
               <th>Status</th>
-              <th>Actions</th>
+              <th>Last Activity</th>
             </tr>
           </thead>
           <tbody>
             <% leads.forEach(function(lead) { %>
             <tr>
               <td><%= lead.id %></td>
-              <td><%= lead.firstName %> <%= lead.lastName %></td>
+              <td>
+                <%= lead.firstName %> <%= lead.lastName %>
+                <br />
+                <small>
+                  <a href="" class="text-primary">View</a> |
+                  <a
+                    href="#"
+                    data-id="<%= lead.id %>"
+                    class="updateLead text-success"
+                    >Edit</a
+                  >
+                  |
+                  <a
+                    href="#"
+                    data-id="<%= lead.id %>"
+                    class="deleteLead text-danger"
+                    >Delete</a
+                  >
+                  |
+                  <a
+                    href="#"
+                    data-id="<%= lead.id %>"
+                    class="addNote text-orange"
+                    >Add Note</a
+                  >
+                </small>
+              </td>
               <td><%= lead.email %></td>
               <td><%= lead.phone %></td>
               <td><%= lead.company %></td>
@@ -49,36 +82,19 @@
                   ><%= lead.leadStatus %></a
                 >
               </td>
-              <td>
-                <a href="#" class="btn btn-info btn-xs">
-                  <i class="fas fa-info-circle"></i> View
-                </a>
-                <a
-                  class="btn updateLead btn-primary btn-xs"
-                  data-id="<%= lead.id %>"
-                >
-                  <i class="fas fa-edit"></i> Edit
-                </a>
-                <a
-                  href="#"
-                  data-id="<%= lead.id %>"
-                  class="deleteLead btn btn-danger btn-xs"
-                >
-                  <i class="fas fa-trash"></i> Delete
-                </a>
-              </td>
+              <th><%= lead.lastActivity %></th>
             </tr>
             <% }); %>
           </tbody>
           <tfoot>
             <tr>
-              <th>ID</th>
+              <th>#</th>
               <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
               <th>Company</th>
               <th>Status</th>
-              <th>Actions</th>
+              <th>Last Activity</th>
             </tr>
           </tfoot>
         </table>
@@ -98,6 +114,17 @@
         order: false,
         pageLength: 10,
         lengthChange: true,
+        initComplete: function () {
+          // Apply the status filter
+          $("#statusFilter").on("change", function () {
+            const status = $(this).val();
+            if (status === "") {
+              $("#leadList").DataTable().column(5).search("").draw();
+            } else {
+              $("#leadList").DataTable().column(5).search(status).draw();
+            }
+          });
+        },
       })
       .buttons()
       .container();
@@ -204,6 +231,14 @@
       });
     });
 
+    // add Notes
+    $(document).on("click", ".addNote", function () {
+      console.log("Testing");
+      let id = $(this).data("id");
+      $("#addNoteForm input[name=leadId]").val(id);
+      $("#addNoteModal").modal("show");
+    });
+
     // Update functionality with SweetAlert
     $(".updateLead").click(function () {
       const leadId = $(this).data("id");
@@ -213,7 +248,7 @@
         success: function (response) {
           const data = response.data;
           console.log(response);
-          $("#updateLeadModal").modal("show");
+
           $("#updateLeadForm input[name=firstName]").val(data.firstName);
           $("#updateLeadForm input[name=lastName]").val(data.lastName);
           $("#updateLeadForm input[name=email]").val(data.email);
@@ -230,6 +265,8 @@
           $("#updateLeadForm textarea[name=description]").val(data.description);
           $("#updateLeadForm select[name=leadStatus]").val(data.leadStatus);
           $(".leadIdUpdate").text(data.id);
+
+          $("#updateLeadModal").modal("show");
 
           $("#updateLeadForm").submit(function (event) {
             event.preventDefault();
@@ -248,7 +285,9 @@
               state: $("#updateLeadForm input[name=state]").val(),
               zip: $("#updateLeadForm input[name=zip]").val(),
               country: $("#updateLeadForm input[name=country]").val(),
-              description: $("#updateLeadForm textarea[name=description]").val(),
+              description: $(
+                "#updateLeadForm textarea[name=description]"
+              ).val(),
               leadStatus: $("#updateLeadForm select[name=leadStatus]").val(),
             };
 
@@ -292,4 +331,4 @@
       });
     });
   });
-</script> 
+</script>

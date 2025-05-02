@@ -1,10 +1,11 @@
-const { Lead } = require("../models/index");
+const { Lead, Note } = require("../models/index");
 const Joi = require("joi");
-const { status, leadStatus } = require("../utils/constant");
+const { status, leadStatus, entityTypes } = require("../utils/constant");
 const VIEW_PATH = "lead";
 const MODULE_TITLE_SINGLE = "Lead";
 const MODULE_TITLE_PLURAL = "Leads";
 const LEAD_MODEL = Lead;
+const NOTE_MODEL = Note;
 
 // Validation schemas
 const LEAD_VALIDATION_SCHEMA = Joi.object({
@@ -66,6 +67,43 @@ module.exports = {
   },
 
   /**
+   * Render the list view with paginated leads
+   * @param {Object} req - Express request object
+   * @param {Object} res - Express response object
+   */
+  createLeadNote: async (req, res) => {
+    try {
+      const data = {
+        entityType: entityTypes.lead,
+        entityId: req.body.leadId,
+        description: req.body.description,
+        createdBy: req?.session?.user?.id || 0,
+      };
+
+      const leadInsertProcess = await NOTE_MODEL.create(data);
+
+      await LEAD_MODEL.update(
+        { lastActivity: new Date() },
+        {
+          where: { id: data.entityId },
+          returning: true,
+        }
+      );
+
+      res.status(201).json({
+        message: `${MODULE_TITLE_SINGLE} created successfully`,
+        data: leadInsertProcess,
+      });
+    } catch (error) {
+      console.error(`Error creating ${MODULE_TITLE_SINGLE}:`, error);
+      res.status(500).json({
+        message: `Failed to create ${MODULE_TITLE_SINGLE}`,
+        error: error.message,
+      });
+    }
+  },
+
+  /**
    * Create a new lead
    * @param {Object} req - Express request object
    * @param {Object} res - Express response object
@@ -88,7 +126,7 @@ module.exports = {
       value.leadStatus = value.leadStatus || leadStatus.New;
       // value.createdBy = req.user.id; @todo
 
-      value.createdBy = req.session.user.id || 0;
+      value.createdBy = req?.session?.user?.id || 0;
 
       const insertProcess = await LEAD_MODEL.create(value);
 

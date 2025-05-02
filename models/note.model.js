@@ -8,7 +8,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       entityType: DataTypes.STRING,
       entityId: DataTypes.INTEGER,
-      title: DataTypes.STRING,
       description: DataTypes.TEXT,
       createdBy: DataTypes.INTEGER,
     },

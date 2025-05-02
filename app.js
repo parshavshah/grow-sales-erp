@@ -21,7 +21,11 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public"), { maxAge: "50000" }));
+app.use(
+  express.static(path.join(__dirname, "public"), {
+    maxAge: 1000 * 60 * 60 * 24,
+  })
+);
 app.use(
   i18n({
     translationsPath: path.join(__dirname, "i18n"),

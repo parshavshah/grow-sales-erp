@@ -4,6 +4,10 @@ module.exports.roles = {
   client: "client",
 };
 
+module.exports.entityTypes = {
+  lead: "lead",
+};
+
 module.exports.leadsIndustries = {
   financialServices: "Financial Services",
   retail: "Retail",
