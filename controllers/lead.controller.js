@@ -30,7 +30,9 @@ const LEAD_VALIDATION_SCHEMA = Joi.object({
 });
 
 const LEAD_STATUS_SCHEMA = Joi.object({
-  status: Joi.string().valid(status.active, status.inactive).required(),
+  leadStatus: Joi.string()
+    .valid(...Object.values(leadStatus))
+    .optional(),
 });
 
 /**
@@ -220,7 +222,8 @@ module.exports = {
           message: `${MODULE_TITLE_SINGLE} not found`,
         });
       }
-
+      
+      value.lastActivity = new Date();
       const [updatedRows] = await LEAD_MODEL.update(value, {
         where: { id: req.params.id },
         returning: true,
