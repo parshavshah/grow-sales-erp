@@ -1,6 +1,6 @@
 <div class="content-wrapper">
   <%- include('../partials/page_title'); %> <%- include('./create'); %> <%-
-  include('./update');%> <%- include('./partial_note_page'); %>
+  include('./update');%> <%- include('./partial_note_page'); %> <%- include('./read'); %>
   <section class="content">
     <div class="card">
       <div class="card-header">
@@ -47,7 +47,7 @@
                 <%= lead.firstName %> <%= lead.lastName %>
                 <br />
                 <small>
-                  <a href="" class="text-primary">View</a> |
+                  <a href="#" data-id="<%= lead.id %>" class="viewLead text-primary">View</a> |
                   <a
                     href="#"
                     data-id="<%= lead.id %>"
@@ -355,6 +355,83 @@
         error: function (xhr) {
           console.error(xhr);
         },
+      });
+    });
+
+    // View Lead functionality
+    $(document).on("click", ".viewLead", function () {
+      const leadId = $(this).data("id");
+      $.ajax({
+        url: "<%= baseUrl %>lead/read/" + leadId,
+        type: "GET",
+        success: function (response) {
+          const data = response.data;
+          
+          // Set personal information
+          $("#readFirstName").text(data.firstName + " " + data.lastName);
+          $("#readEmail").text(data.email || "N/A");
+          $("#readPhone").text(data.phone || "N/A");
+          $("#readCompany").text(data.company || "N/A");
+          $("#readJobTitle").text(data.jobTitle || "N/A");
+          
+          // Set additional information
+          $("#readLeadSource").text(data.leadSource || "N/A");
+          $("#readIndustry").text(data.industry || "N/A");
+          $("#readStatus").text(data.leadStatus || "N/A");
+          $("#readLastActivity").text(new Date(data.lastActivity).toLocaleString() || "N/A");
+          
+          // Set address information
+          $("#readAddress").text(data.address || "N/A");
+          $("#readCity").text(data.city || "N/A");
+          $("#readState").text(data.state || "N/A");
+          $("#readZip").text(data.zip || "N/A");
+          $("#readCountry").text(data.country || "N/A");
+          
+          // Set description
+          $("#readDescription").text(data.description || "No description available");
+          
+          // Load and display notes
+          $.ajax({
+            url: "<%= baseUrl %>lead/note/list/" + leadId,
+            type: "GET",
+            success: function (notesResponse) {
+              const notes = notesResponse.data || [];
+              const notesContainer = $("#leadNotes");
+              notesContainer.empty();
+              
+              if (notes.length === 0) {
+                notesContainer.append('<div class="list-group-item">No notes available</div>');
+              } else {
+                notes.forEach(function(note) {
+                  const noteDate = new Date(note.createdAt).toLocaleString();
+                  notesContainer.append(`
+                    <div class="list-group-item">
+                      <div class="d-flex w-100 justify-content-between">
+                        <small class="text-muted">${noteDate}</small>
+                      </div>
+                      <p class="mb-1">${note.description}</p>
+                    </div>
+                  `);
+                });
+              }
+            },
+            error: function (xhr) {
+              console.error("Error loading notes:", xhr);
+              $("#leadNotes").html('<div class="list-group-item">Error loading notes</div>');
+            }
+          });
+          
+          // Show the modal
+          $("#readLeadModal").modal("show");
+        },
+        error: function (xhr) {
+          console.error("Error loading lead:", xhr);
+          Swal.fire({
+            title: "Error!",
+            text: "Failed to load lead details",
+            icon: "error",
+          });
+        }
       });
     });
   });

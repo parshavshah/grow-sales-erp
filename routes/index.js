@@ -76,6 +76,7 @@ router.get("/lead/read/:id", LeadController.readLeadAPI);
 router.delete("/lead/delete/:id", LeadController.deleteLeadAPI);
 router.patch("/lead/status/:id", LeadController.updateLeadStatusAPI);
 router.post("/lead/note/create", LeadController.createLeadNote);
+router.get("/lead/note/list/:id", LeadController.getNoteByLeadId);
 
 // Account routes
 router.get("/account/list", AccountController.listAccountView);

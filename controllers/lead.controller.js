@@ -73,6 +73,36 @@ module.exports = {
    * @param {Object} req - Express request object
    * @param {Object} res - Express response object
    */
+  getNoteByLeadId: async (req, res) => {
+    try {
+      const leadId = req.params.id;
+
+      const notes = await NOTE_MODEL.findAll({
+        order: [["id", "DESC"]],
+        raw: true,
+        where: {
+          entityId: leadId,
+          entityType: entityTypes.lead,
+        },
+      });
+
+      res.status(200).json({
+        data: notes,
+      });
+    } catch (error) {
+      console.error("Error in listLeadView:", error);
+      res.status(500).json({
+        message: "Failed to fetch notes",
+        error: error.message,
+      });
+    }
+  },
+
+  /**
+   * Render the list view with paginated leads
+   * @param {Object} req - Express request object
+   * @param {Object} res - Express response object
+   */
   createLeadNote: async (req, res) => {
     try {
       const data = {
@@ -222,7 +252,7 @@ module.exports = {
           message: `${MODULE_TITLE_SINGLE} not found`,
         });
       }
-      
+
       value.lastActivity = new Date();
       const [updatedRows] = await LEAD_MODEL.update(value, {
         where: { id: req.params.id },

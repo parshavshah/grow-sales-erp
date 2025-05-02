@@ -1,0 +1,119 @@
+<div class="modal fade" id="readLeadModal" tabindex="-1" role="dialog" aria-labelledby="readLeadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="readLeadModalLabel">Lead Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <h6 class="text-muted">Personal Information</h6>
+            <div class="table-responsive">
+              <table class="table table-sm">
+                <tr>
+                  <th>Name:</th>
+                  <td id="readFirstName"></td>
+                </tr>
+                <tr>
+                  <th>Email:</th>
+                  <td id="readEmail"></td>
+                </tr>
+                <tr>
+                  <th>Phone:</th>
+                  <td id="readPhone"></td>
+                </tr>
+                <tr>
+                  <th>Company:</th>
+                  <td id="readCompany"></td>
+                </tr>
+                <tr>
+                  <th>Job Title:</th>
+                  <td id="readJobTitle"></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h6 class="text-muted">Additional Information</h6>
+            <div class="table-responsive">
+              <table class="table table-sm">
+                <tr>
+                  <th>Lead Source:</th>
+                  <td id="readLeadSource"></td>
+                </tr>
+                <tr>
+                  <th>Industry:</th>
+                  <td id="readIndustry"></td>
+                </tr>
+                <tr>
+                  <th>Status:</th>
+                  <td id="readStatus"></td>
+                </tr>
+                <tr>
+                  <th>Last Activity:</th>
+                  <td id="readLastActivity"></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row mt-3">
+          <div class="col-12">
+            <h6 class="text-muted">Address</h6>
+            <div class="table-responsive">
+              <table class="table table-sm">
+                <tr>
+                  <th>Address:</th>
+                  <td id="readAddress"></td>
+                </tr>
+                <tr>
+                  <th>City:</th>
+                  <td id="readCity"></td>
+                </tr>
+                <tr>
+                  <th>State:</th>
+                  <td id="readState"></td>
+                </tr>
+                <tr>
+                  <th>Zip:</th>
+                  <td id="readZip"></td>
+                </tr>
+                <tr>
+                  <th>Country:</th>
+                  <td id="readCountry"></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-3">
+          <div class="col-12">
+            <h6 class="text-muted">Description</h6>
+            <div class="card">
+              <div class="card-body">
+                <p id="readDescription" class="mb-0"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-3">
+          <div class="col-12">
+            <h6 class="text-muted">Notes</h6>
+            <div id="leadNotes" class="list-group">
+              <!-- Notes will be dynamically inserted here -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
